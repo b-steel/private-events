@@ -35,7 +35,7 @@ If you'd like to log in as a basic user -
 Here's a basic overview of the steps I took (following the overview in the TOP guidelines for the project) and the resources I used
 
 ## User Model
-First off I created a User model and some basic views / templates for some associated tasks.  Most of this was accomplished with Django's builtin User class and Generic Templates
+First off I created a User model and some basic views / templates for some associated tasks.
     - Creating a new user
     - Showing details about a user
     - A sign-in page that does not require authentication (just put you user ID in)

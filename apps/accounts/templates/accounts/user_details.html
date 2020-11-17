@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}    
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% block title %}New User {% endblock title %}
+
+
+{% block content %}
+<br>
+<div class="row">
+    <div class="col">
+        {# Display a user #}
+        <h1>{{ object.username }}</h1>
+        <hr>
+        <p>{{ object.first_name }} {{ object.last_name }}</p>
+        <p>{{ object.email }}</p>
+        <p>Joined: {{ object.created_at }}</p>
+    </div>
+</div>
+    
+
+
+{% endblock content %}

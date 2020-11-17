@@ -1,8 +1,34 @@
 {% extends 'core/base.html' %}
 
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}    
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
 {% block title %}New User {% endblock title %}
 
 
 {% block content %}
-The new user page
+<br>
+<div class="row">
+    <div class="col col-md-6">
+        {# Display a form #}
+        <form action="." method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">
+            Create User
+            </button>
+        {% endbuttons %}
+        </form>
+    </div>
+</div>
+    
+
+
 {% endblock content %}
