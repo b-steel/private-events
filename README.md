@@ -17,13 +17,18 @@ If you'd like to log in as a basic user -
         - first_name
         - last_name
         - email
-        - (attending) - relationship from Event.Attendees
-        - (invited_to) - relationship from Event.Invited
+        - (events_attending) - relationship from Event.Attendees
+        - (events_invited_to) - relationship from Event.Invited
     - Event
+        - name
+        - date
         - time
         - location - ForeignKey to Location
+        - description
         - invited - ManyToMany to User
         - attending - ManyToMany to User
+        - creator - ForeignKey to User
+        - hosts - ManyToMany to User
     - Location
         - name
         - address

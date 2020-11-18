@@ -17,14 +17,31 @@
 <div class="row">
     <div class="col">
         {# Display a user #}
-        <h1>{{ object.username }}</h1>
+        <h1>{{ user.username }}</h1>
         <hr>
-        <p>{{ object.first_name }} {{ object.last_name }}</p>
-        <p>{{ object.email }}</p>
-        <p>Joined: {{ object.date_joined | date }}</p>
+        <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Joined: {{ user.date_joined | date }}</p>
     </div>
 </div>
-    
+<div class="row">
+    <div class="col"> 
+        <div>Events:</div>
+        <div class="list-group">
+            {% for event in user.events_created.all %}
+            <a href="" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ event.name }}</h5>
+                    <small>{{ event.date | date}}</small>
+                </div>
+                <p class="mb-1">{{ event.location.name }}</p>
+            </a>
+            {% empty %}
+            <p class="list-group-item">This user has not created any events</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 
 {% endblock content %}
