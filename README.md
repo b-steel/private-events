@@ -23,7 +23,7 @@ If you'd like to log in as a basic user -
         - time
         - location - ForeignKey to Location
         - invited - ManyToMany to User
-        - sttending - ManyToMany to User
+        - attending - ManyToMany to User
     - Location
         - name
         - address
@@ -41,3 +41,11 @@ First off I created a User model and some basic views / templates for some assoc
         - Decided not to go with the Django generic DetailView here since the urlpattern for this requires that the slug be the primary key of the object instance. I wanted the user to be able to put in a username and see the users profile (provided they're logged in)
     - A sign-in page that does not require authentication (just put you user ID in)
     - Login / Logout links and Navigation links to empty pages (home, user account, etc)
+
+
+## Events Model
+Build the Event model and begin to integrate it's pieces in to the other model (User - the creator of an Event) and the page.
+    - Integrate the Event with the User models
+    - Show all a user's events on their profile page
+    - Page to create events, show all events, show singe event
+
