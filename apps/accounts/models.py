@@ -10,3 +10,4 @@ class User(models.Model):
     created_at = models.DateField(_("created at"), auto_now_add=True)
     modified_at = models.DateTimeField(_("modified at"), auto_now=True)
     
+    

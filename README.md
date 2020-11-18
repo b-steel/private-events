@@ -38,4 +38,6 @@ Here's a basic overview of the steps I took (following the overview in the TOP g
 First off I created a User model and some basic views / templates for some associated tasks.
     - Creating a new user
     - Showing details about a user
+        - Decided not to go with the Django generic DetailView here since the urlpattern for this requires that the slug be the primary key of the object instance. I wanted the user to be able to put in a username and see the users profile (provided they're logged in)
     - A sign-in page that does not require authentication (just put you user ID in)
+    - Login / Logout links and Navigation links to empty pages (home, user account, etc)

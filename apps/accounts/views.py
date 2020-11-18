@@ -2,10 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django import views
 from django.views.generic.detail import DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 
-from .forms import SigninForm, UserForm
-from .models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
+
+from .forms import LoginForm, UserForm
 
 
 class NewUser(views.View):
@@ -20,9 +24,33 @@ class NewUser(views.View):
             return redirect(reverse('accounts:user_details', kwargs={'username':user.username}))
 
 
-class UserDetailView(views.View):
+class UserDetailView(LoginRequiredMixin, views.View):
     # Available info from urls.py <slug:username>
     def get(self, request, username):
         user = get_object_or_404(User, username=username)
         return render(request, 'accounts/user_details.html', {'object': user})
-        
+
+
+class LoginView(views.View):
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'accounts/login.html', {'form': form}) 
+    
+    def post(self, request):
+        bound_form = LoginForm(request.POST)
+        if bound_form.is_valid():
+            user = User.objects.get(username=bound_form.cleaned_data['username'])
+            login(request, user)
+            return render(request, 'accounts/success.html', {})
+        else:
+            return render(request, 'accounts/login.html', {'form': bound_form})
+
+
+class LogoutView(views.View):
+    def get(self, request):
+        logout(request)
+        return render(request, 'accounts/logout_success.html')
+
+class HomePageView(TemplateView):
+
+    template_name='accounts/home.html'

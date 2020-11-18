@@ -9,19 +9,15 @@
 
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
-{% block title %}New User {% endblock title %}
+{% block title %}Login {% endblock title %}
 
 
 {% block content %}
 <br>
 <div class="row">
-    <div class="col">
-        {# Display a user #}
-        <h1>{{ object.username }}</h1>
-        <hr>
-        <p>{{ object.first_name }} {{ object.last_name }}</p>
-        <p>{{ object.email }}</p>
-        <p>Joined: {{ object.date_joined | date }}</p>
+    <div class="col col-md-6">
+        <p>Welcome to the Home Page</p>
+        </form>
     </div>
 </div>
     
