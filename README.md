@@ -52,5 +52,7 @@ First off I created a User model and some basic views / templates for some assoc
 Build the Event model and begin to integrate it's pieces in to the other model (User - the creator of an Event) and the page.
     - Integrate the Event with the User models
     - Show all a user's events on their profile page
+
+Up until this point I'd just been making things as I went, but for experience I decided to use Django's testing framework to do TDD for the rest of the project.
     - Page to create events, show all events, show singe event
 
