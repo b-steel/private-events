@@ -39,7 +39,10 @@ If you'd like to log in as a basic user -
 
 Here's a basic overview of the steps I took (following the overview in the TOP guidelines for the project) and the resources I used
 
-## User Model
+## Utilities
+After making the models I created a few utility functions for rapid creation of instances of events, users and locations to speed up the writing of tests.
+
+## User model and associated views
 First off I created a User model and some basic views / templates for some associated tasks.
     - Creating a new user
     - Showing details about a user
@@ -48,11 +51,13 @@ First off I created a User model and some basic views / templates for some assoc
     - Login / Logout links and Navigation links to empty pages (home, user account, etc)
 
 
-## Events Model
+## Events model and associated views
 Build the Event model and begin to integrate it's pieces in to the other model (User - the creator of an Event) and the page.
     - Integrate the Event with the User models
     - Show all a user's events on their profile page
 
-Up until this point I'd just been making things as I went, but for experience I decided to use Django's testing framework to do TDD for the rest of the project.
-    - Page to create events, show all events, show singe event
+Up to this point I'd just been making things as I went, but for experience I decided to use Django's testing framework to do TDD for the rest of the project.
+    - Next steps are to create pages to create events, show all events, show single event
+    - I started with tests for showing a single event, since it's easy to use the Django testing framework to create events for testing purposes
+        - 
 

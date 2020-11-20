@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = False # overridden in settings_local.py
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver']
 
 
 # Application definition

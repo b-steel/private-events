@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "*"
 django-bootstrap4 = "*"
+essential-generators = "*"
 
 [dev-packages]
 bpython = "*"
