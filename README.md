@@ -42,6 +42,9 @@ Here's a basic overview of the steps I took (following the overview in the TOP g
 ## Utilities
 After making the models I created a few utility functions for rapid creation of instances of events, users and locations to speed up the writing of tests.
 
+I created a ModelFactory class that allows users to utilize three different preset Users, three preset Locations, and create random or specific events.  My hope is that this will make writing tests quicker and simpler, as well as testing within the shell for simple poking around.  
+
+
 ## User model and associated views
 First off I created a User model and some basic views / templates for some associated tasks.
     - Creating a new user
@@ -58,6 +61,12 @@ Build the Event model and begin to integrate it's pieces in to the other model (
 
 Up to this point I'd just been making things as I went, but for experience I decided to use Django's testing framework to do TDD for the rest of the project.
     - Next steps are to create pages to create events, show all events, show single event
-    - I started with tests for showing a single event, since it's easy to use the Django testing framework to create events for testing purposes
-        - 
+    - Showing a single event - my requirements for the page are:
+        - Details are unavailable unless logged in
+        - There's an option to attend / not-attend depending on the current situation
+            - These are only available to those who are invited
+        - The attending people are listed, invited people are not listed
+        - A host has the ability to edit the event
+
+While writing tests for the 'Create Event' page I started to run into some trouble tring to devise how I wanted the page to work.  The question was how to allow you to invite (or set as a host) existing users - and a similar problem for the location of the event. The prompt for the assignment didn't have any info about this (plus the prompt is for Ruby / Rails), and I wanted the interface to be relatively intuitive.  I settled on having a list of all users with buttons for inviting them.  The buttons would be tied to an AJAX request to add the user to the invited list.  However, in my search for resources on how to do such AJAX requests I ended up on a tangent of learning some basic jQuery as well.  Needless to say that took me some time to figure out, but ultimately I'm very happy with the solution.
 

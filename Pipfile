@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 django-bootstrap4 = "*"
 essential-generators = "*"
+django-bootstrap-modal-forms = "*"
 
 [dev-packages]
 bpython = "*"
