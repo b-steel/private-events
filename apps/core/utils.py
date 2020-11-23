@@ -5,108 +5,89 @@ from django.utils import timezone
 from essential_generators import DocumentGenerator
 
 NOTHING = object()
+gen = DocumentGenerator()
 
 class UserFactory():
     def __init__(self):
-        michelle = {
-            'first_name': 'Michelle', 
-            'last_name': 'Obama',
-            'email': 'michelle@wh.gov', 
-            'username': 'firstLady',
-            'password': 'michellepass'
-        }
-        barack = {
-            'first_name': 'Barack', 
-            'last_name': 'Obama',
-            'email': 'barack@wh.gov', 
-            'username': '44thPREZ',
-            'password': 'barackpass'
-        }
-        aoc = {
-            'first_name': 'Alexandria', 
-            'last_name': 'Ocasio-ortrez',
-            'email': 'alexandria@congress.gov', 
-            'username': 'AOC',
-            'password': 'alexandriapass'
-        }
-        self.michelle = User.objects.get_or_create(**michelle)[0]
-        self.barack = User.objects.get_or_create(**barack)[0]
-        self.aoc = User.objects.get_or_create(**aoc)[0]
+        self.last = None
+
+    def new(self, username=NOTHING, first_name=NOTHING, last_name=NOTHING, password=NOTHING, email=NOTHING):
+        if username is NOTHING:
+            username = '_'.join(gen.name().lower().split(' '))
+        if first_name is NOTHING:
+            first_name = username.split('_')[0].capitalize()
+        if last_name is NOTHING:
+            last_name = username.split('_')[1].capitalize()
+        if password is NOTHING:
+            password = gen.slug()
+        if email is NOTHING:
+            email = gen.email()
+
+        user = User.objects.create(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+        self.last = user
+        self.__setattr__(user.username, user)
+        return user
 
     @property
-    def one(self):
-        return self.michelle
-
-    @property
-    def two(self):
-        return self.barack
-
-    @property
-    def three(self):
-        return self.aoc
+    def all(self):
+        return list(User.objects.all())
 
     def random(self):
-        return random.choice([self.michelle, self.barack, self.aoc])
+        if self.all:
+            return random.choice(self.all) 
+        else: 
+            return self.new()
 
-           
+
 class LocationFactory():
     def __init__(self):
-        white_house = {
-            'name': 'The Whitehouse', 
-            'address': '100 Capitol Dr, Washington DC'
-        }
-        the_hill = {
-            'name': 'The Hill', 
-            'address': 'around the corner from The Whitehouse'
-        }
-        van = {
-            'name': 'A Van',
-            'address': 'Down by the River'
-        }
-        self.white_house = Location.objects.get_or_create(**white_house)[0]
-        self.the_hill = Location.objects.get_or_create(**the_hill)[0]
-        self.van = Location.objects.get_or_create(**van)[0]
-    
-    @property
-    def one(self):
-        return self.white_house
+        self.last = None
+        
+    def new(self, name=NOTHING, address=NOTHING):
+        if name is NOTHING:
+            name = gen.name()
+        if address is NOTHING:
+            address = f"{random.randrange(range(1000, 10000))} {gen.name()} {random.choice(['St', 'Rd', 'Ln', 'Ave'])}"
+
+        loc = Location.objects.create(name=name, address=address)
+        self.last = loc
+        self.__setattr__(loc.name, loc)
+        return loc
 
     @property
-    def two(self):
-        return self.the_hill
-
-    @property
-    def three(self):
-        return self.van
+    def all(self):
+        return list(Location.objects.all())
 
     def random(self):
-        return random.choice([self.white_house, self.the_hill, self.van])
+        if self.all:
+            return random.choice(self.all) 
+        else: 
+            return self.new()
 
 
 class EventFactory():
     def __init__(self):
         self.users = UserFactory()
         self.locations = LocationFactory()
-        self.gen = DocumentGenerator()
         self.last = None
-        self.events = []
     
 
-    def new(self, creator=NOTHING, location=NOTHING, name=NOTHING, description=NOTHING, invited=NOTHING, attending=NOTHING, date=NOTHING):
-        user_list = [self.users.one, self.users.two, self.users.three]
+    def new(self, creator=NOTHING, location=NOTHING, name=NOTHING, description=NOTHING, invited=NOTHING, attending=NOTHING, date=NOTHING, host=NOTHING):
 
         if creator is NOTHING:
             creator = self.users.random()
         if location is NOTHING:
             location = self.locations.random()
         if name is NOTHING:
-            name = self.gen.name().capitalize()
+            name = gen.name().capitalize()
         if description is NOTHING:
-            description = self.gen.sentence()
+            description = gen.sentence()
         if invited is NOTHING:
-            invited = user_list.pop(random.randint(0, len(user_list) - 1))
+            invited = []
         if attending is NOTHING:
-            attending = user_list.pop(random.randint(0, len(user_list) - 1))
+            attending = []
+        if host is NOTHING: 
+            host = []
         
         if date == 'future':
             date = timezone.now() + timezone.timedelta(days=random.randint(2, 100))
@@ -116,18 +97,34 @@ class EventFactory():
             date = timezone.now() + timezone.timedelta(days=1)
 
         event = Event.objects.create(name=name, creator=creator, date=date, time=date, description=description, location=location)
-        event.invited.add(invited)
-        event.attending.add(attending)
+
+        if invited:
+            event.invited.add(invited)
+        if attending:
+            event.attending.add(attending)
+        if host:
+            event.hosts.add(host)
         event.save()
 
-        self.events.append(event)
         self.last=event
         self.__setattr__(event.name, event)
         return event
-        
+
+    @property
+    def all(self):
+        return list(Event.objects.all())
+
+    def random(self):
+        if self.all:
+            return random.choice(self.all) 
+        else: 
+            return self.new()
+
+
+
 class ModelFactory():
     def __init__(self):
-        self.user = UserFactory()
-        self.location = LocationFactory()
-        self.event = EventFactory()
+        self.users = UserFactory()
+        self.locations = LocationFactory()
+        self.events = EventFactory()
         
