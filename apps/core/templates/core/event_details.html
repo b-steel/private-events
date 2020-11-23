@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}    
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% block title %}Event Details {% endblock title %}
+
+
+{% block content %}
+<br>
+
+<div class="card">
+    <div class="row">
+        <div class="col">
+            <h1 id="event-name">{{ event.name }}</h1>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p id="event-description">{{ event.description }}</p>
+                <small>{{event.date | date}}</small>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Attendees
+                    <div class="list-group">
+                        {% for user in event.attending.all %}
+                        <a href="{% url 'accounts:user_details' user.username" class="list-group-item list-group-item-action">
+                            <p>{{ user.username }}</p>
+                        </a>
+                        {% empty %}
+                        <p class="list-group-item">This Event does not have any attendees yet</p> 
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
