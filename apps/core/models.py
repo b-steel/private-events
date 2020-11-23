@@ -11,56 +11,36 @@ class Location(models.Model):
         return f'{self.name}'
 
 
+class EventManager(models.Manager):
+    def get_future_events(self, when=timezone.now()):
+        ''' Returns the queryset of all the events that are happening after <date> '''
+        return super().get_queryset().filter(date__gte=when)
+
+    def get_past_events(self, when=timezone.now()):
+        ''' Returns the queryset of all the events that happened before <date> '''
+        return super().get_queryset().filter(date__lte=when) 
     
 class Event(models.Model):
     name = models.CharField(_("event name"), max_length=50)
-    
     description = models.TextField(_("event description"), null=True)
-    
     date = models.DateField(_("event date"), auto_now=False, auto_now_add=False)
-
-    time = models.TimeField(_("event time"), auto_now=False, auto_now_add=False)
-    
+    time = models.CharField(_("event time"), max_length=50)
     creator = models.ForeignKey(User, verbose_name=_("event creator"), on_delete=models.CASCADE, related_name='events_created')
-    
     location = models.ForeignKey(Location, verbose_name=_("event location"), on_delete=models.CASCADE, related_name=_('events'))
-    
     invited = models.ManyToManyField(User, verbose_name=_("invitees"), related_name='events_invited_to')
-    
     attending = models.ManyToManyField(User, verbose_name=_("attendees"), related_name='events_attending')
-    
     hosts = models.ManyToManyField(User, verbose_name=_("event hosts"), related_name='events_hosting')
+
+    objects = EventManager()
 
     def __str__(self):
         return f'{self.name}'
 
+    class Meta:
+        ordering = ['date']
 
 
 
-def create_sample_models():
 
-    # Users
-    allison = User(first_name='Allison', last_name='Hyatt', email='allison@email.com', username='a-dawg')
-    allison.save()
-    ben = User.objects.create(username='bean', email='b@email.com', first_name='Ben', last_name='Hidden')
-    
-    # Locations
-    casa = Location.objects.create(name='Mi Casa', address='Tortilla Flat')
-    park = Location.objects.create(name='The Park', address='100 Road St')
 
-    # Events
-    picnic = Event.objects.create(
-        date=timezone.datetime(year=2020, month=12, day=1),
-        time=timezone.datetime(year=2020, month=12, day=1),
-        location=park,
-        creator=allison,
-        name='Picnic at the park',
-    )
-    big_party = Event.objects.create(
-        date=timezone.datetime(year=2020, month=12, day=4),
-        time=timezone.datetime(year=2020, month=12, day=4),
-        location=casa,
-        creator=allison,
-        name='Bigass Party at my House',
-        description='We\'re gonna rage our faces off'
-    )
+

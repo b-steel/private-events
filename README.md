@@ -70,3 +70,28 @@ Up to this point I'd just been making things as I went, but for experience I dec
 
 While writing tests for the 'Create Event' page I started to run into some trouble tring to devise how I wanted the page to work.  The question was how to allow you to invite (or set as a host) existing users - and a similar problem for the location of the event. The prompt for the assignment didn't have any info about this (plus the prompt is for Ruby / Rails), and I wanted the interface to be relatively intuitive.  I settled on having a list of all users with buttons for inviting them.  The buttons would be tied to an AJAX request to add the user to the invited list.  However, in my search for resources on how to do such AJAX requests I ended up on a tangent of learning some basic jQuery as well.  Needless to say that took me some time to figure out, but ultimately I'm very happy with the solution.
 
+
+# TO BUILD
+- event index
+    - class methods for .past and .future (done)
+    - html
+- create event
+- created event stage 2 (just html)
+- event show (done)
+- event edit 
+- AJAX section
+    - get invite data
+        - class method .is_ivited or .is_inviteable
+    - get host data
+        - class method again
+    - invite person
+        - class method
+    - host person
+    - uninvite person
+    - unhost person
+    - attend
+    - un-attend
+- Modal section
+    - Add/Edit hosts (html)
+    - Add / edit invitations (html)
+

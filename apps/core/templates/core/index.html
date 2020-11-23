@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}    
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% block title %}Index {% endblock title %}
+
+
+{% block content %}
+<br>
+
+<div class="card">
+    <div class="row">
+        <div class="col">
+            <h1>Upcoming Events</h1>
+        </div>
+    </div>
+    
+    {% for event in future %}
+       <div class="row">
+           <div class="col-10">
+               <p>{{ event.name }}</p>
+               <br>
+               <p>{{ event.description}}</p>
+           </div>
+           <div class="col-2"><small>{{ event.date | date }}</small></div>
+       </div>
+    {% empty %}
+        {% if user.is_authenticated %}
+            <p>It looks like there are no upcoming events, perhaps you'd like to </p>
+            <a href="{% url 'core:create_event'  %}">create</a>
+            <p> your own</p>
+        {% else %}
+            <p>It looks like there are no upcoming events, you can </p>
+            <a href="{% url 'accounts:login'  %}">login</a>
+            <p> to create your own</p>
+        {% endif %}
+    {% endfor %}
+
+    <div class="row">
+        <div class="col">
+            <h1>Past Events</h1>
+        </div>
+    </div>
+    {% for event in past %}
+       <div class="row">
+           <div class="col-10">
+               <p>{{ event.name }}</p>
+               <br>
+               <p>{{ event.description}}</p>
+           </div>
+           <div class="col-2"><small>{{ event.date | date }}</small></div>
+       </div>
+    {% empty %}
+        p{It looks as if there haven't yet been any events.  That's good news, you didn't miss anything! We know millenials have such FOMO}
+    {% endfor %}
+</div>
+
+
+
+{% endblock content %}

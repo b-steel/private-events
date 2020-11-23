@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}    
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<!-- Don't forget to change the title of the page -->
+{% block title %}Event Details {% endblock title %}
+<!-- Don't forget to change the title of the page -->
+
+
+{% block content %}
+<br>
+
+<div class="card">
+    <div class="row">
+        <div class="col">
+           
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

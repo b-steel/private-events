@@ -47,7 +47,7 @@ class LocationFactory():
         if name is NOTHING:
             name = gen.name()
         if address is NOTHING:
-            address = f"{random.randrange(range(1000, 10000))} {gen.name()} {random.choice(['St', 'Rd', 'Ln', 'Ave'])}"
+            address = f"{random.randrange(1000, 10000)} {gen.name().split(' ')[1]} {random.choice(['St', 'Rd', 'Ln', 'Ave'])}"
 
         loc = Location.objects.create(name=name, address=address)
         self.last = loc
@@ -75,9 +75,9 @@ class EventFactory():
     def new(self, creator=NOTHING, location=NOTHING, name=NOTHING, description=NOTHING, invited=NOTHING, attending=NOTHING, date=NOTHING, host=NOTHING):
 
         if creator is NOTHING:
-            creator = self.users.random()
+            creator = self.users.new()
         if location is NOTHING:
-            location = self.locations.random()
+            location = self.locations.new()
         if name is NOTHING:
             name = gen.name().capitalize()
         if description is NOTHING:
@@ -96,7 +96,7 @@ class EventFactory():
         elif date is NOTHING:
             date = timezone.now() + timezone.timedelta(days=1)
 
-        event = Event.objects.create(name=name, creator=creator, date=date, time=date, description=description, location=location)
+        event = Event.objects.create(name=name, creator=creator, date=date, description=description, location=location)
 
         if invited:
             event.invited.add(invited)

@@ -108,7 +108,7 @@ class EventIndexTestCase(TestCase):
             past4 = timezone.now() - timezone.timedelta(days=4)
             
             self.event1 = self.mf.events.new(date=day1)
-            self.past_event = self.mf.events.new(date=day2)
+            self.event2 = self.mf.events.new(date=day2)
             self.event3 = self.mf.events.new(date=day3)
             self.event4 = self.mf.events.new(date=day4)
 
@@ -117,22 +117,22 @@ class EventIndexTestCase(TestCase):
             self.past_event3 = self.mf.events.new(date=past3)
             self.past_event4 = self.mf.events.new(date=past4)
 
-            response = self.c.get(reverse("core:event_index"))
+            response = self.c.get(reverse('core:event_index'))
 
-            page = response.rendered_content
-            self.assertGreater(page.index(self.event2.name),page.index(self.event1.name)) #Event 2 should come after event 1
-            self.assertGreater(page.index(self.event3.name),page.index(self.event2.name))
-            self.assertGreater(page.index(self.event4.name),page.index(self.event3.name))
+            page = response.content
+            self.assertGreater(page.find(self.event2.name.encode('utf-8')),page.find(self.event1.name.encode('utf-8'))) #Event 2 should come after event 1
+            self.assertGreater(page.find(self.event3.name.encode('utf-8')),page.find(self.event2.name.encode('utf-8')))
+            self.assertGreater(page.find(self.event4.name.encode('utf-8')),page.find(self.event3.name.encode('utf-8')))
             # Past events
-            self.assertGreater(page.index(self.past_event2.name),page.index(self.past_event1.name))
-            self.assertGreater(page.index(self.past_event3.name),page.index(self.past_event2.name))
-            self.assertGreater(page.index(self.past_event4.name),page.index(self.past_event3.name))
+            self.assertGreater(page.find(self.past_event2.name.encode('utf-8')),page.find(self.past_event1.name.encode('utf-8')))
+            self.assertGreater(page.find(self.past_event3.name.encode('utf-8')),page.find(self.past_event2.name.encode('utf-8')))
+            self.assertGreater(page.find(self.past_event4.name.encode('utf-8')),page.find(self.past_event3.name.encode('utf-8')))
 
-        with self.subTest('All events have a link to their own detail page'):
-            events = [
-                self.event1, self.event2, self.event3, self.event4, self.past_event1, self.past_event2, self.past_event3, self.past_event4, 
-            ]
-            soup = BeautifulSoup(response.content, 'html.parser')
+        # with self.subTest('All events have a link to their own detail page'):
+        #     events = [
+        #         self.event1, self.event2, self.event3, self.event4, self.past_event1, self.past_event2, self.past_event3, self.past_event4, 
+        #     ]
+        #     soup = BeautifulSoup(response.content, 'html.parser')
             # Need to implement once we know what the html will look like
 
 
@@ -154,7 +154,7 @@ class CreateEventTestCase(TestCase):
             'name': 'Test Event',
             'date': tomorrow, 
             'time': tomorrow, 
-            'location': self.location, 
+            'location': location, 
             'description': "It's gonna be so fun!",
         }
         response = self.c.post(reverse('core:create_event'), **ctx)

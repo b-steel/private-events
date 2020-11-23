@@ -31,15 +31,16 @@ class EventTestCase(TestCase):
         self.c.force_login(self.logged_in_user)
 
         self.test_location = self.mf.locations.new()
+        self.other_location = self.mf.locations.new()
+        self.event_with_logged_in_creator = self.mf.events.new(creator=self.logged_in_user, location=self.other_location)
+        self.event_at_test_location = self.mf.events.new(location=self.test_location)
 
 
     def test_creator_related_name(self):
-        self.event_with_logged_in_creator = self.mf.events.new(creator=self.logged_in_user)
         self.assertIn(self.event_with_logged_in_creator, self.logged_in_user.events_created.all())
 
     
     def test_location_related_name(self):
-        self.event_at_test_location = self.mf.events.new(location=self.test_location)
         self.assertIn(self.event_at_test_location, self.test_location.events.all())
         self.assertNotIn(self.event_with_logged_in_creator, self.test_location.events.all())
 

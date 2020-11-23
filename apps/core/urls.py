@@ -1,9 +1,9 @@
 from django.urls import path, include
-from core import views
+from . import views
 
-app_name='core'
+app_name ='core'
 urlpatterns = [
-    # path('event/index/', PLACEHOLDER, name='event_index'),
+    path('event/index/', views.EventIndexView.as_view(), name='event_index'),
     # path('event/create_event/', PLACEHOLDER, name='create_event'),
     # path('event/<slug:event_id>/show/', PLACEHOLDER, name='event_details'),
     # path('event/<slug:event_id>/edit/', PLACEHOLDER, name='edit_event'),
