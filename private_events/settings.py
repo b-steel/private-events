@@ -125,7 +125,8 @@ STATICFILES_DIRS = [
 
 # Bootstrap 
 
-
+# Authentication
+LOGIN_URL = 'accounts:login'
 
 # Local Settings
 try: 

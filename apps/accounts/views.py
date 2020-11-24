@@ -43,6 +43,9 @@ class LoginView(views.View):
         if bound_form.is_valid():
             user = User.objects.get(username=bound_form.cleaned_data['username'])
             login(request, user)
+            redirect_to = request.POST.get('next')
+            if redirect_to:
+                return redirect(redirect_to)
             return render(request, 'accounts/success.html', {})
         else:
             return render(request, 'accounts/login.html', {'form': bound_form})
@@ -56,3 +59,4 @@ class LogoutView(views.View):
 class HomePageView(TemplateView):
 
     template_name='accounts/home.html'
+

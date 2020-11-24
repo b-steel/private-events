@@ -21,6 +21,7 @@
         <form action="." method="post" class="form">
         {% csrf_token %}
         {% bootstrap_form form %}
+        <input type="hidden" name="next" value="{{request.GET.next}}">
         {% buttons %}
             <button type="submit" class="btn btn-primary">
             Login
