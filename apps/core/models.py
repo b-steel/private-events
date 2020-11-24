@@ -1,10 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User as auth_user
 from django.core.cache import cache
 
+class User(auth_user):
 
+    def full_name(self):
+        return self.first_name.capitalize() + ' ' + self.last_name.capitalize()
 
 class Location(models.Model):
     name = models.CharField(_("name"), max_length=50, blank=False )

@@ -6,8 +6,8 @@ from django.views.generic import TemplateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 
+from apps.core.models import User
 from .forms import LoginForm, UserForm
 
 

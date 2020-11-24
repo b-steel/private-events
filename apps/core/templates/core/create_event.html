@@ -70,7 +70,7 @@
                 <div class="list-group">
 
                     {% for user in user_list %}
-                    <div class="list-group-item">{{user.objects.full_name}}</div>
+                    <div class="list-group-item">{{user.full_name}}</div>
                     {% empty %}
                     <div class="list-group-item">No users found</div>
                     {% endfor %}

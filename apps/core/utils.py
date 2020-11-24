@@ -1,6 +1,5 @@
-from .models import Event, Location
+from .models import Event, Location, User
 import random
-from django.contrib.auth.models import User
 from django.utils import timezone
 from essential_generators import DocumentGenerator
 

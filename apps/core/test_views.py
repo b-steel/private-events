@@ -1,10 +1,9 @@
 from django.test import TestCase, Client
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 
-from .models import Location, Event
+from .models import Location, Event, User
 from .utils import ModelFactory
 
 from bs4 import BeautifulSoup
