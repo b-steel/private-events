@@ -18,7 +18,6 @@ class EventTestCase(TestCase):
         self.logged_in_user = self.mf.users.new()
         self.c.force_login(self.logged_in_user)
 
-        self.test_location = self.mf.locations.new()
 
     def test_event_details_view(self):
         ''' Test for the detail view page of a single event'''
@@ -36,7 +35,6 @@ class EventTestCase(TestCase):
         with self.subTest('The correct details are displayed'):
             self.assertContains(response, f'{self.single_event.name}')
             self.assertContains(response, f'{self.single_event.location}')
-            self.assertContains(response, f'{self.single_event.location.address}')
             self.assertContains(response, f'{self.single_event.creator.first_name}')
             # self.assertContains(response, f'{self.single_event.date.FORMAT}')  Need to format
 
@@ -149,12 +147,11 @@ class CreateEventTestCase(TestCase):
     def test_submit_form(self):
         
         tomorrow = timezone.now() + timezone.timedelta(days=1)
-        location = self.mf.locations.new()
         ctx = {
             'name': 'Test Event',
             'date': tomorrow, 
             'time': tomorrow, 
-            'location': location, 
+            'location': 'a place', 
             'description': "It's gonna be so fun!",
         }
         response = self.c.post(reverse('core:create_event'), **ctx)
@@ -166,6 +163,7 @@ class CreateEventTestCase(TestCase):
 
 
         response = self.c.get(reverse('core:event_stage_two', args=[new_event.id]))
+        
         with self.subTest('Stage 2 page links to the event details'):
             self.assertContains(response, reverse('core:event_details', args=[new_event.id]))
 
@@ -173,29 +171,29 @@ class CreateEventTestCase(TestCase):
             invite_response = self.c.get(reverse('core:get_potential_invites'))
             self.assertFalse(new_event.creator.username in invite_response['users_to_invite'])
 
-        with self.subTest('A location thats not in the database'):
-            # Create the location
-            ctx['name'] = 'Not in Database'
-            ctx['location'] = '100 New Location Rd'
-            response = self.c.post(reverse('core:create_event'), **ctx)
-            new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
-            new_location = Location.objects.filter(address=ctx['location'])[0]
-            self.assertNotEqual(new_event, None)
-            self.assertNotEqual(new_location, None)
-            self.assertRedirects(response, reverse('core:event_stage_two', args=[new_event.id]))
+        # with self.subTest('A location thats not in the database'):
+        #     # Create the location
+        #     ctx['name'] = 'Not in Database'
+        #     ctx['location'] = '100 New Location Rd'
+        #     response = self.c.post(reverse('core:create_event'), **ctx)
+        #     new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
+        #     new_location = Location.objects.filter(address=ctx['location'])[0]
+        #     self.assertNotEqual(new_event, None)
+        #     self.assertNotEqual(new_location, None)
+        #     self.assertRedirects(response, reverse('core:event_stage_two', args=[new_event.id]))
             
             
 
-        with self.subTest('A location thats in the database'):
-            # Don't make a duplicate
-            ctx['name'] = 'In Database'
-            ctx['location'] = '100 Existing Location Rd'
-            Location.objects.create(name='Existing Location', address='100 Existing Location Rd')
-            response = self.c.post(reverse('core:create_event'), **ctx)
-            new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
-            self.assertNotEqual(new_event, None)
-            self.assertEqual(len(Location.objects.filter(address=ctx['location'])), 1) #Don't create a second one
-            self.assertRedirects(response, reverse('core:event_stage_two', args=[new_event.id]))
+        # with self.subTest('A location thats in the database'):
+        #     # Don't make a duplicate
+        #     ctx['name'] = 'In Database'
+        #     ctx['location'] = '100 Existing Location Rd'
+        #     Location.objects.create(name='Existing Location', address='100 Existing Location Rd')
+        #     response = self.c.post(reverse('core:create_event'), **ctx)
+        #     new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
+        #     self.assertNotEqual(new_event, None)
+        #     self.assertEqual(len(Location.objects.filter(address=ctx['location'])), 1) #Don't create a second one
+        #     self.assertRedirects(response, reverse('core:event_stage_two', args=[new_event.id]))
             
             
 

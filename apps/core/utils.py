@@ -64,11 +64,14 @@ class LocationFactory():
         else: 
             return self.new()
 
+class StringLocationFactory():
+    def new(self):
+        return f"{random.randrange(1000, 10000)} {gen.name().split(' ')[1]} {random.choice(['St', 'Rd', 'Ln', 'Ave'])}"
 
 class EventFactory():
     def __init__(self):
         self.users = UserFactory()
-        self.locations = LocationFactory()
+        self.locations = StringLocationFactory()
         self.last = None
     
 
@@ -125,6 +128,6 @@ class EventFactory():
 class ModelFactory():
     def __init__(self):
         self.users = UserFactory()
-        self.locations = LocationFactory()
+        self.locations = StringLocationFactory()
         self.events = EventFactory()
         

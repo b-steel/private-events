@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}    
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<!-- Don't forget to change the title of the page -->
+{% block title %}Edit Event {% endblock title %}
+<!-- Don't forget to change the title of the page -->
+
+
+{% block content %}
+<div class="row">
+    <div class="col col-md-6">
+        {# Display a form #}
+        <form action="." method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">
+                Update
+            </button>
+        {% endbuttons %}
+        </form>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}
