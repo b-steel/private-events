@@ -1,10 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from django.core.cache import cache
+
 from . import models, forms
 from .models import User
+
+import json
+
 
 class EventDetailView(LoginRequiredMixin, View):
 
@@ -12,24 +17,27 @@ class EventDetailView(LoginRequiredMixin, View):
         event = get_object_or_404(models.Event, id=event_id)
         return render(request, 'core/event_details.html', {'event': event})
 
+
 class EventIndexView(View):
 
     def get(self, request):
         future = models.Event.objects.get_future_events()
         past = models.Event.objects.get_past_events().order_by('-date')
-    
+
         return render(request, 'core/index.html', {'past': past, 'future': future})
+
 
 class CreateEventView(LoginRequiredMixin, View):
     def get(self, request):
         form = forms.EventForm()
-        return render(request, 'core/create_event.html', {'form': form, 'user_list': User.objects.all().exclude(username=request.user.username)})
+        user_list = User.objects.all().exclude(username=request.user.username)
+        return render(request, 'core/create_event.html', {'form': form, 'user_list': user_list})
 
     def post(self, request):
         bound_form = forms.EventForm(request.POST)
         if bound_form.is_valid():
             event = models.Event.objects.create(
-                name=bound_form.cleaned_data['name'], 
+                name=bound_form.cleaned_data['name'],
                 description=bound_form.cleaned_data['description'],
                 date=bound_form.cleaned_data['date'],
                 creator=request.user
@@ -38,8 +46,9 @@ class CreateEventView(LoginRequiredMixin, View):
         else:
             return render(request, 'core/create_event.html', {'form': bound_form})
 
+
 class EditEventView(LoginRequiredMixin, View):
-    def validate_host(self, person:User, event:models.Event)-> bool:
+    def validate_host(self, person: User, event: models.Event) -> bool:
         if person in event.objects.hosts.all():
             return True
         return False
@@ -55,7 +64,7 @@ class EditEventView(LoginRequiredMixin, View):
     def post(self, request, event_id):
         form = forms.EventForm(request.POST)
         event = get_object_or_404(models.Event, id=event_id)
-        
+
         if form.is_valid():
             event.name = form.cleaned_data['name']
             event.desription = form.cleaned_data['description']
@@ -63,5 +72,24 @@ class EditEventView(LoginRequiredMixin, View):
             event.save()
 
             return render(request, 'core/event_details', {'event': event})
-        else: 
+        else:
             return render(request, 'core/edit_event.html', {'form': form})
+
+# AJAX views
+
+
+def ajax_invite_user(request):
+    ''' It's a GET request'''
+    user_id = request.GET['user_id'].split('-')[3]
+    data = cache.get('create_event', None)
+    if data:
+        data['invited'][f'{user_id}'] = True
+    else:
+        data = {
+            'invited': {
+                f'{user_id}': True
+            },
+            'hosts': {}
+        }
+    cache.set('create_event', data, 600)
+    return JsonResponse(data)

@@ -30,7 +30,8 @@
         </form>
     </div>
     <div class="col">
-        <p>Don't forget to invite some guests!  You can also assign additional hosts who can then help you out by editing your event</p>
+        <p>Don't forget to invite some guests! You can also assign additional hosts who can then help you out by editing
+            your event</p>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal">
             Invite Guests
@@ -70,7 +71,43 @@
                 <div class="list-group">
 
                     {% for user in user_list %}
-                    <div class="list-group-item">{{user.full_name}}</div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="span">{{user.full_name}}</div>
+                        <div>
+                            <button type="button" class="btn btn-primary" id="button-invite-user-{{user.id}}">
+                                Invite
+                            </button>
+                            <script>
+                                $("#button-invite-user-{{user.id}}").click(function (event) {
+                                    if ($(this).text() !== 'Cancel Invite') {
+                                        $(this).text('Cancel Invite');
+                                    } else {
+                                        $(this).text('Invite');
+                                    }
+
+                                    $.ajax({
+                                        url: '/core/ajax/invite_user',
+                                        data: {
+                                            user_id: this.id
+                                        },
+                                        type: 'GET', 
+                                        dataType: 'json'
+                                    })
+                                        .done(function( resp ) {
+                                        // Log each key in the response data
+                                        $.each( resp, function( key, value ) {
+                                            console.log( key + " : " + value );
+                                        });
+                                    });
+                                });
+
+
+                            </script>
+                            <button type="button" class="btn btn-info" id="button-host-user-{{user.id}}">
+                                Make Host
+                            </button>
+                        </div>
+                    </div>
                     {% empty %}
                     <div class="list-group-item">No users found</div>
                     {% endfor %}

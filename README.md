@@ -72,13 +72,11 @@ While writing tests for the 'Create Event' page I started to run into some troub
 
 
 # TO BUILD
-- event index
-    - class methods for .past and .future (done)
-    - html
-- create event
-- created event stage 2 (just html)
-- event show (done)
-- event edit 
+clicking invite guests will bring up modal of all the users (no search, too complicated). Each will have a button for Inite or host or Uninvite or unhost depending.  The button will toggle the info for that person and store the data in the cache
+
+when the event is created, pull all htat info from the cache and update the event, then clear out the cache
+
+
 - AJAX section
     - get invite data
         - class method .is_ivited or .is_inviteable

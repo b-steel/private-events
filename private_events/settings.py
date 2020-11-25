@@ -125,6 +125,13 @@ STATICFILES_DIRS = [
 
 # Bootstrap 
 
+# Caches
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 # Authentication
 LOGIN_URL = 'accounts:login'
 
