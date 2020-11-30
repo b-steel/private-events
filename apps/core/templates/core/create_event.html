@@ -33,9 +33,87 @@
         <p>Don't forget to invite some guests! You can also assign additional hosts who can then help you out by editing
             your event</p>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal">
+        <button type="button" class="btn git btn-primary" data-toggle="modal" data-target="#inviteModal">
             Invite Guests
         </button>
+        <!-- Invite Modal -->
+        <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="inviteModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-group">
+    
+                            {% for user in user_list %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="span">{{user.full_name}}</div>
+                                <div>
+                                    <button type="button" class="btn btn-primary" id="button-invite-user-{{user.id}}">
+                                        Invite
+                                    </button>
+                                    <button type="button" class="btn btn-info" id="button-host-user-{{user.id}}">
+                                        Make Host
+                                    </button>
+    
+                                    <script>
+                                        var action;
+                                        $("#button-invite-user-{{user.id}}, #button-host-user-{{user.id}}").click(function (event) {
+                                            if (this.id.includes('invite')) {
+                                                if ($(this).text() !== 'Cancel Invite') {
+                                                    $(this).text('Cancel Invite').toggleClass('btn-primary btn-warning');
+                                                    action = 'invite';
+                                                } else {
+                                                    $(this).text('Invite').toggleClass('btn-primary btn-warning');
+                                                    action = 'cancel invite';
+                                                }
+                                            } else {
+                                                if ($(this).text() !== 'Cancel Host') {
+                                                    $(this).text('Cancel Host').toggleClass('btn-primary btn-danger');
+                                                    action = 'make host';
+                                                } else {
+                                                    $(this).text('Make Host').toggleClass('btn-primary btn-danger');
+                                                    action = 'cancel host';
+                                                }
+                                            }
+    
+                                            $.ajax({
+                                                url: '/core/ajax/invite_user',
+                                                data: {
+                                                    user_id: this.id,
+                                                    action: action
+                                                },
+                                                type: 'GET',
+                                                dataType: 'json'
+                                            })
+                                                .done(function (resp) {
+                                                    // Log each key in the response data
+                                                    // $.each( resp, function( key, value ) {
+                                                    //     console.log( key + " : " + value );
+                                                    // });
+                                                    console.log({ resp })
+                                                });
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="list-group-item">No users found</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <h4>Invited</h4>
@@ -54,84 +132,3 @@
 </div>
 
 {% endblock content %}
-
-<!-- Modal -->
-{% block modals %}
-<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="inviteModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="list-group">
-
-                    {% for user in user_list %}
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="span">{{user.full_name}}</div>
-                        <div>
-                            <button type="button" class="btn btn-primary" id="button-invite-user-{{user.id}}">
-                                Invite
-                            </button>
-                            <button type="button" class="btn btn-info" id="button-host-user-{{user.id}}">
-                                Make Host
-                            </button>
-                           
-                            <script>
-                                var action;
-                                $("#button-invite-user-{{user.id}}, #button-host-user-{{user.id}}").click(function (event) {
-                                    if (this.id.includes('invite')){
-                                        if ($(this).text() !== 'Cancel Invite') {
-                                            $(this).text('Cancel Invite').toggleClass('btn-primary btn-warning');
-                                            action = 'invite';
-                                        } else {
-                                            $(this).text('Invite').toggleClass('btn-primary btn-warning');
-                                            action='cancel invite';
-                                        }
-                                    } else {
-                                        if ($(this).text() !== 'Cancel Host') {
-                                            $(this).text('Cancel Host').toggleClass('btn-primary btn-danger');
-                                            action = 'make host';
-                                        } else {
-                                            $(this).text('Make Host').toggleClass('btn-primary btn-danger');
-                                            action='cancel host';
-                                        } 
-                                    }
-
-                                    $.ajax({
-                                        url: '/core/ajax/invite_user',
-                                        data: {
-                                            user_id: this.id, 
-                                            action: action
-                                        },
-                                        type: 'GET', 
-                                        dataType: 'json'
-                                    })
-                                        .done(function( resp ) {
-                                        // Log each key in the response data
-                                        // $.each( resp, function( key, value ) {
-                                        //     console.log( key + " : " + value );
-                                        // });
-                                        console.log({resp})
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="list-group-item">No users found</div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock modals %}
