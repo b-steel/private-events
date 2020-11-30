@@ -30,19 +30,36 @@ class EventIndexView(View):
 class CreateEventView(LoginRequiredMixin, View):
     def get(self, request):
         form = forms.EventForm()
+        # exclude the creator
         user_list = User.objects.all().exclude(username=request.user.username)
         return render(request, 'core/create_event.html', {'form': form, 'user_list': user_list})
 
     def post(self, request):
         bound_form = forms.EventForm(request.POST)
         if bound_form.is_valid():
+            creator = User.objects.get(username=request.user.username)
             event = models.Event.objects.create(
                 name=bound_form.cleaned_data['name'],
                 description=bound_form.cleaned_data['description'],
                 date=bound_form.cleaned_data['date'],
-                creator=request.user
+                creator=creator
             )
-            return render(request, 'core/stage_2.html', {'event': event})
+            # Cached invitation / host data   
+            data = cache.get('create_event', None)
+            if data:
+                for item in data['invited'].items():
+                    if item[1]: #if true means the user is invited
+                        event.invited.add(User.objects.get(id=item[0]))
+                for item in data['hosts'].items():
+                    if item[1]: #if true means the user is host
+                        event.hosts.add(User.objects.get(id=item[0]))
+            event.hosts_are_not_attending()
+            event.save()
+            # Delete cached data so future events don't duplicate it 
+            cache.delete('create_event')
+
+            return redirect(reverse('core/event_details.html', args=[event.id]))
+
         else:
             return render(request, 'core/create_event.html', {'form': bound_form})
 

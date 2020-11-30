@@ -37,9 +37,9 @@
     
 {% empty %}
     {% if user.is_authenticated %}
-        <p>It looks like there are no upcoming events, perhaps you'd like to </p>
-        <a href="{% url 'core:create_event'  %}">create</a>
-        <p> your own</p>
+        <p>It looks like there are no upcoming events, perhaps you'd like to
+            <a href="{% url 'core:create_event'  %}">create</a>
+             your own</p>
     {% else %}
         <p>It looks like there are no upcoming events, you can </p>
         <a href="{% url 'accounts:login'  %}">login</a>
@@ -66,7 +66,7 @@
     </div>
 </a>
 {% empty %}
-    p{It looks as if there haven't yet been any events.  That's good news, you didn't miss anything! We know millenials have such FOMO}
+    <p>It looks as if there haven't yet been any events.  That's good news, you didn't miss anything! We know millenials have such FOMO</p>
 {% endfor %}
 
 

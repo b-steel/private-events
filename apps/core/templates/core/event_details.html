@@ -17,13 +17,43 @@
 
 <div class="row">
     <div class="col">
-        <h1 id="event-name">{{ event.name }}</h1>
+        <h1 id="event-name">{{ event.name | capfirst}}</h1>
     </div>
 </div>
 <div class="row">
     <div class="col">
+        <p>created by: <a href="{% url 'accounts:user_details' user.username %}">{{event.creator.full_name }}</a></p>
         <p id="event-description">{{ event.description }}</p>
         <small>{{event.date | date}}</small>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col">
+        Invited
+        <div class="list-group">
+            {% for user in event.invited.all %}
+            <a href="{% url 'accounts:user_details' user.username %}" class="list-group-item list-group-item-action">
+                <p>{{ user.full_name }}</p>
+            </a>
+            {% empty %}
+            <p class=" list-group-item">This Event does not have any ivited people yet</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        Hosts
+        <div class="list-group">
+            {% for user in event.hosts.all %}
+            <a href="{% url 'accounts:user_details' user.username %}" class="list-group-item list-group-item-action">
+                <p>{{ user.full_name }}</p>
+            </a>
+            {% empty %}
+            <p class=" list-group-item">This Event does not have any hosts yet</p>
+            {% endfor %}
+        </div>
     </div>
 </div>
 <div class="row">
@@ -31,8 +61,8 @@
         Attendees
         <div class="list-group">
             {% for user in event.attending.all %}
-            <a href="{% url 'accounts:user_details' user.username" class="list-group-item list-group-item-action">
-                <p>{{ user.username }}</p>
+            <a href="{% url 'accounts:user_details' user.username %}" class="list-group-item list-group-item-action">
+                <p>{{ user.full_name }}</p>
             </a>
             {% empty %}
             <p class=" list-group-item">This Event does not have any attendees yet</p>

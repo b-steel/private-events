@@ -45,6 +45,14 @@ class Event(models.Model):
     class Meta:
         ordering = ['date']
 
+    def hosts_are_not_attending(self):
+        ''' If someone is both made a host and invited, remove them from the invited list. Host supercedes invites'''
+        hosts = self.hosts.all()
+        invited = self.invited.all()
+        for person in hosts:
+            if person in invited:
+                self.invited.remove(person)
+
 
 
 
