@@ -66,6 +66,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'core:create_event' %}">New Event</a>
+                        </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
@@ -98,6 +101,7 @@
             </div>
         </footer>
     </body>
+
     <!-- Set of blocks that can be used to display JavaScript files -->
     {% block footer_javascript %}
         {% block footer_javascript_site %}

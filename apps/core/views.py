@@ -58,7 +58,7 @@ class CreateEventView(LoginRequiredMixin, View):
             # Delete cached data so future events don't duplicate it 
             cache.delete('create_event')
 
-            return redirect(reverse('core/event_details.html', args=[event.id]))
+            return redirect(reverse('core:event_details', args=[event.id]))
 
         else:
             return render(request, 'core/create_event.html', {'form': bound_form})
@@ -93,6 +93,11 @@ class EditEventView(LoginRequiredMixin, View):
             return render(request, 'core/edit_event.html', {'form': form})
 
 # AJAX views
+def ajax_invite_users(request):
+    '''It's a POST request'''
+    data = json.loads(request.GET['data'])
+    cache.set('create_event', data, 600)
+    return JsonResponse(data)
 
 
 def ajax_invite_user(request):
