@@ -7,6 +7,8 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 
+from django.utils import timezone
+
 from apps.core.models import User
 from .forms import LoginForm, UserForm
 
@@ -28,7 +30,9 @@ class UserDetailView(LoginRequiredMixin, views.View):
     def get(self, request, username):
         user = get_object_or_404(User, username=username)
         ctx = {
-            'user': user
+            'profile': user,
+            'attending_events': user.events_attending.filter(date__gte=timezone.now()),
+            'attended_events': user.events_attending.filter(date__lt=timezone.now()),
         }
         return render(request, 'accounts/user_details.html', ctx)
 

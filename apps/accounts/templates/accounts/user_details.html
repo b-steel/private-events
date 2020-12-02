@@ -17,19 +17,19 @@
 <div class="row">
     <div class="col">
         {# Display a user #}
-        <h1>{{ user.username }}</h1>
+        <h1>{{ profile.username }}</h1>
         <hr>
-        <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
-        <p>Email: {{ user.email }}</p>
-        <p>Joined: {{ user.date_joined | date }}</p>
+        <p>Name: {{ profile.first_name }} {{ profile.last_name }}</p>
+        <p>Email: {{ profile.email }}</p>
+        <p>Joined: {{ profile.date_joined | date }}</p>
     </div>
 </div>
 <div class="row">
     <div class="col"> 
-        <div>Events:</div>
+        <div>Attending:</div>
         <div class="list-group">
-            {% for event in user.events_created.all %}
-            <a href="" class="list-group-item list-group-item-action">
+            {% for event in attending_events %}
+            <a href="{% url 'core:event_details' event.id  %}" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ event.name }}</h5>
                     <small>{{ event.date | date}}</small>
@@ -37,7 +37,23 @@
                 <p class="mb-1">{{ event.location.name }}</p>
             </a>
             {% empty %}
-            <p class="list-group-item">This user has not created any events</p>
+            <p class="list-group-item">This user is not attending any events</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col"> 
+        <div>Attended:</div>
+        <div class="list-group">
+            {% for event in attended_events %}
+            <a href="{% url 'core:event_details' event.id  %}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ event.name }}</h5>
+                    <small>{{ event.date | date}}</small>
+                </div>
+                <p class="mb-1">{{ event.location.name }}</p>
+            </a>
+            {% empty %}
+            <p class="list-group-item">This user has not attended any events</p>
             {% endfor %}
         </div>
     </div>

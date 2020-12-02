@@ -9,12 +9,6 @@ class User(auth_user):
     def full_name(self):
         return self.first_name.capitalize() + ' ' + self.last_name.capitalize()
 
-class Location(models.Model):
-    name = models.CharField(_("name"), max_length=50, blank=False )
-    address = models.CharField(_("address"), max_length=50, blank=False)
-
-    def __str__(self):
-        return f'{self.name}'
 
 class EventManager(models.Manager):
     def get_future_events(self, when=timezone.now()):

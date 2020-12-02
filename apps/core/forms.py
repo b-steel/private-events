@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Event, Location, User
+from .models import Event, User
 
 class EventForm(forms.ModelForm):
     class Meta:

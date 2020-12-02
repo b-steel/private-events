@@ -99,38 +99,3 @@ def ajax_invite_users(request):
     cache.set('create_event', data, 600)
     return JsonResponse(data)
 
-
-def ajax_invite_user(request):
-    ''' It's a GET request'''
-    user_id = request.GET['user_id'].split('-')[3]
-    action = request.GET['action']
-    data = cache.get('create_event', None)
-    if not data:
-        data = {
-            'invited': {},
-            'hosts': {}
-        }
-    
-    def invite():
-        data['invited'][f'{user_id}'] = True
-    def make_host():
-        data['hosts'][f'{user_id}'] = True
-    def cancel_invite():
-        data['invited'].pop(f'{user_id}', 'Not in cache')
-    def cancel_host():
-        data['hosts'].pop(f'{user_id}', 'Not in cache')
-        
-
-    swap = {
-        'invite': invite,
-        'make host': make_host,
-        'cancel invite': cancel_invite,
-        'cancel host': cancel_host,
-    }
-    
-    # Do the thing
-    swap[action]()
-
-    cache.set('create_event', data, 600)
-    return JsonResponse(data)
-
