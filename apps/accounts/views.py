@@ -43,7 +43,12 @@ class InvitationsView(LoginRequiredMixin, views.View):
 class LoginView(views.View):
     def get(self, request):
         form = LoginForm()
-        return render(request, 'accounts/login.html', {'form': form}) 
+        redirect_to = request.GET.get('next', '')
+        redirected = False
+        if redirect_to != '':
+            redirected = True
+
+        return render(request, 'accounts/login.html', {'form': form, 'redirect': redirected}) 
     
     def post(self, request):
         bound_form = LoginForm(request.POST)

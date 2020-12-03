@@ -17,7 +17,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col">
+    <div class="col p-3">
         {# Display a form #}
         <form action="." method="post" class="form">
             {% csrf_token %}
@@ -29,7 +29,7 @@
             {% endbuttons %}
         </form>
     </div>
-    <div class="col">
+    <div class="col p-3">
         <p>Don't forget to invite some guests! You can also assign additional hosts who can then help you out by editing
             your event</p>
         <!-- Button trigger modal -->
@@ -74,21 +74,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h4>Invited</h4>
-                <div class="list-group">
-                    <div class="list-group-item">None...yet</div>
-                </div>
-            </div>
-            <div class="col">
-                <h4>Hosts</h4>
-                <div class="list-group">
-                    <div class="list-group-item">You</div>
-                </div>
-            </div>
-            <div id="result"></div>
         </div>
     </div>
 </div>
@@ -141,9 +126,6 @@
             url: "{% url 'core:ajax_invite_users' %}",
             data: {data: JSON.stringify(data)},
             dataType:'json',
-            success: function(resp) {
-                $("#result").html(resp);
-            }
         });
     });
 

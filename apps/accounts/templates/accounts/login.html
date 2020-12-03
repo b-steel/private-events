@@ -16,8 +16,12 @@
 <br>
 <div class="row">
     <div class="col col-md-6">
-        {# Display a form #}
+        {% if request.GET.next %}
+        <h4 class="text-warning">You must be logged in to see that content</h4>
+        {% else %}
+        {% endif %}
         <p>Please enter your username</p>
+        <!-- Display a form -->
         <form action="." method="post" class="form">
         {% csrf_token %}
         {% bootstrap_form form %}

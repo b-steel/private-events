@@ -22,54 +22,57 @@
 </div>
 <div class="row">
     <div class="col">
-        <p>created by: <a href="{% url 'accounts:user_details' user.username %}">{{event.creator.full_name }}</a></p>
+
+        <p>Created by:
+            <a href="{% url 'accounts:user_details' event.creator.username %}">{{event.creator.full_name }}</a>
+        </p>
+        {% if event.hosts.all %}
+        <p>Additional Hosts:
+            {% for host in event.hosts.all %}
+            {% include 'core/comma.html' %}
+            <a href="{% url 'accounts:user_details' host.username %}">{{ host.full_name }}</a>
+            {% empty %}
+            {% endfor %}
+        </p>
+        {% else %}
+        {% endif %}
+        <hr>
+        <p>When: {{event.date | date:"l, M jS, Y" }}</p>
+        <p>Where: {{ event.location |default:"No Location - please contact the host for more info"}}</p>
+        <hr>
         <p id="event-description">{{ event.description }}</p>
-        <small>{{event.date | date}}</small>
     </div>
-</div>
-<hr>
-<div class="row">
     <div class="col">
-        Invited
-        <div class="list-group">
-            {% for user in event.invited.all %}
-            <a href="{% url 'accounts:user_details' user.username %}" class="list-group-item list-group-item-action">
-                <p>{{ user.full_name }}</p>
-            </a>
-            {% empty %}
-            <p class=" list-group-item">This Event does not have any invited people yet</p>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        Hosts
-        <div class="list-group">
-            {% for user in event.hosts.all %}
-            <a href="{% url 'accounts:user_details' user.username %}" class="list-group-item list-group-item-action">
-                <p>{{ user.full_name }}</p>
-            </a>
-            {% empty %}
-            <p class=" list-group-item">This Event does not have any hosts yet</p>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        Attendees
-        <div class="list-group">
-            {% for user in event.attending.all %}
-            <a href="{% url 'accounts:user_details' user.username %}" class="list-group-item list-group-item-action">
-                <p>{{ user.full_name }}</p>
-            </a>
-            {% empty %}
-            <p class=" list-group-item">This Event does not have any attendees yet</p>
-            {% endfor %}
+        <div class="row">
+            <div class="col">
+                <h5>Invited</h5>
+                <div class="list-group-flush">
+                    {% for user in event.invited.all %}
+                    <a href="{% url 'accounts:user_details' user.username %}"
+                        class="list-group-item list-group-item-action">
+                        <p>{{ user.full_name }}</p>
+                    </a>
+                    {% empty %}
+                    <p class=" list-group-item">This Event does not have any outstanding invitations</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col">
+                <h5>Attending</h5>
+                <div class="list-group-flush">
+                    {% for user in event.attending.all %}
+                    <a href="{% url 'accounts:user_details' user.username %}"
+                        class="list-group-item list-group-item-action">
+                        <p>{{ user.full_name }}</p>
+                    </a>
+                    {% empty %}
+                    <p class=" list-group-item">This Event does not have any attendees yet</p>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-
-{% endblock content %}
+    {% endblock content %}

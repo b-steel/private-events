@@ -4,7 +4,7 @@
 {% load bootstrap4 %}
 
 {# Load CSS and JavaScript #}
-{% bootstrap_css %}    
+{% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
 {# Display django.contrib.messages as Bootstrap alerts #}
@@ -17,11 +17,22 @@
 {% block content %}
 <br>
 <div class="row">
-    <div class="col col-md-6">
-        
+    <div class="col">
+        <p>Welcome to <em>Private Events</em>, an events manager page where you can create events and invite friends.
+        </p>
+        <p>Feel free to look around, you can create your own account, or if you\'d just like to explore some
+            functionality you can log in with the username <strong>test_user</strong> (There\'s no password required)
+        </p>
+        <p>The project was created with Django, using a bit of jQuery to deal with some of the button clicks, such as
+            sending or accepting an invite. 
+        </p>
+        <p>You can take a look at the <a href="">README</a> if you'd like a more in depth discussion of the steps I
+            took to create the page.
+        </p>
+
     </div>
 </div>
-    
+
 
 
 {% endblock content %}

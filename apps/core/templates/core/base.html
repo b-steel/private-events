@@ -9,7 +9,7 @@
 <!-- HTML HEAD -->
 
 <head>
-    <title>{% block title %}Instance Title {% endblock title %}| Page Title </title>
+    <title>{% block title %}Instance Title {% endblock title %}| EventLite </title>
     {% block head_favicon %}
     {% comment %}
     <link rel="icon" type="image/png" href="{{ STATIC_URL }}images/favicon.ico"> {% endcomment %}
@@ -47,12 +47,12 @@
     <!-- HEADER -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light {% block nav-style %}{% endblock %}">
-            <a class="navbar-brand" href="#">EventsManager</a>
+            <span class="navbar-brand">EventLite</span>
 
             {% if user.is_authenticated %}
             <div class="navbar-text">
                 <a class="nav-link" href="{% url 'accounts:user_details' user.username %}"><span>Welcome
-                        {{ user.username }}</span></a>
+                        {{ user.first_name | capfirst }}</span></a>
             </div>
             {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -63,34 +63,36 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:event_index' %}">Home</a>
+                        <a class="nav-link" href="{% url 'core:event_index' %}">Index</a>
                     </li>
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'core:create_event' %}">New Event</a>
                     </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
-                    </li>
                     {% endif %}
                 </ul>
                 <div>
-                    {% if invites %}
-                    <a href="{% url 'accounts:invitations'  %}">You have {{ invites.count }} invite{{invites.count | pluralize}}</a>
-                    {% else %}
-                    {% endif %}
-                    
-                    <!-- <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form> -->
+                    <ul class="navbar-nav mr-auto">
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+                        </li>
+                        {% if invites %}
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="{% url 'accounts:invitations'  %}">You have {{ invites.count }} invite{{invites.count | pluralize}}</a>
+                        </li>
+                        {% else %}
+                        {% endif %}
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+                        </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -105,7 +107,7 @@
     </main>
 
     <!-- FOOTER  -->
-    <footer class="footer mt-auto py-3">
+    <footer class="footer mt-auto py-3 fixed-bottom">
         <div class="container text-center">
             <small class="text-muted">Copyright &copy; Your Website</small>
         </div>

@@ -17,16 +17,16 @@
 <div class="row">
     <div class="col">
         {# Display a user #}
-        <h1>{{ profile.username }}</h1>
+        <h1>{{ profile.full_name }}</h1>
         <hr>
-        <p>Name: {{ profile.first_name }} {{ profile.last_name }}</p>
+        <p>Username: {{ profile.username }}</p>
         <p>Email: {{ profile.email }}</p>
         <p>Joined: {{ profile.date_joined | date }}</p>
     </div>
 </div>
 <div class="row">
     <div class="col"> 
-        <div>Attending:</div>
+        <div>Future Events:</div>
         <div class="list-group">
             {% for event in attending_events %}
             <a href="{% url 'core:event_details' event.id  %}" class="list-group-item list-group-item-action">
@@ -37,12 +37,12 @@
                 <p class="mb-1">{{ event.location.name }}</p>
             </a>
             {% empty %}
-            <p class="list-group-item">This user is not attending any events</p>
+            <p class="list-group-item">This user is not attending any upcoming events</p>
             {% endfor %}
         </div>
     </div>
     <div class="col"> 
-        <div>Attended:</div>
+        <div>Past Attendance:</div>
         <div class="list-group">
             {% for event in attended_events %}
             <a href="{% url 'core:event_details' event.id  %}" class="list-group-item list-group-item-action">
