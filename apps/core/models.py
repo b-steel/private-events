@@ -9,6 +9,15 @@ class User(auth_user):
     def full_name(self):
         return self.first_name.capitalize() + ' ' + self.last_name.capitalize()
 
+    def attend_event(self, event):
+        if self in event.invited.all():
+            event.invited.remove(self)
+            event.attending.add(self)
+            return True
+        return False
+    
+    
+
 
 class EventManager(models.Manager):
     def get_future_events(self, when=timezone.now()):
@@ -46,8 +55,6 @@ class Event(models.Model):
         for person in hosts:
             if person in invited:
                 self.invited.remove(person)
-
-
 
 
 
