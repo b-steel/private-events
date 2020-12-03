@@ -11,5 +11,6 @@ urlpatterns = [
     # path('get_potential_invites/', PLACEHOLDER, name='get_potential_invites'), 
     # path('get_potential_hosts/', PLACEHOLDER, name='get_potential_hosts'),
     path('ajax/invite_users/', views.ajax_invite_users, name='ajax_invite_users'),
+    path('ajax/accept_invite/', views.ajax_accept_invite, name='ajax_accept_invite'),
 
 ]

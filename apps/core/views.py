@@ -94,8 +94,19 @@ class EditEventView(LoginRequiredMixin, View):
 
 # AJAX views
 def ajax_invite_users(request):
-    '''It's a POST request'''
+    '''It's a GET request'''
     data = json.loads(request.GET['data'])
     cache.set('create_event', data, 600)
     return JsonResponse(data)
+
+def ajax_accept_invite(request):
+    event_id = request.GET['event_id']
+    event_id = int(event_id)
+    event = models.Event.objects.get(pk=event_id)
+    user = User.objects.get(username=request.user.username)
+    event.invited.remove(user)
+    event.attending.add(user)
+    event.save()
+    return HttpResponse('Success')
+
 

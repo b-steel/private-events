@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% block title %}User Details {% endblock title %}
+
+
+{% block content %}
+<br>
+<div>Invitations:</div>
+<div class="list-group">
+    {% for event in invites %}
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'core:event_details' event.id  %}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ event.name }}</h5>
+                    <small>{{ event.date | date}}</small>
+                </div>
+                <p class="mb-1">{{ event.location.name }}</p>
+            </a>
+        </div>
+        <div class="col">
+
+            <button id="button-accept-invite-{{event.id}}" class="btn btn-primary">Accept Invite</button>
+        </div>
+    </div>
+    {% empty %}
+    {% endfor %}
+</div>
+
+
+{% endblock content %}
+{% block footer_javascript_page %}
+<script>
+    $("button[id|=button-accept-invite]").click(function (event){
+        $.get({
+            url: "{% url 'core:ajax_accept_invite' %}",
+            data: {event_id: $(this).attr("id").split('-')[3]},
+            success: function(resp) {
+                console.log('Invite Accepted');
+            }
+        });
+    });
+</script>
+{% endblock footer_javascript_page %}

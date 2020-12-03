@@ -36,6 +36,9 @@ class UserDetailView(LoginRequiredMixin, views.View):
         }
         return render(request, 'accounts/user_details.html', ctx)
 
+class InvitationsView(LoginRequiredMixin, views.View):
+    def get(self, request):
+        return render(request, 'accounts/invitations.html')
 
 class LoginView(views.View):
     def get(self, request):
@@ -63,4 +66,6 @@ class LogoutView(views.View):
 class HomePageView(TemplateView):
 
     template_name='accounts/home.html'
+
+
 
