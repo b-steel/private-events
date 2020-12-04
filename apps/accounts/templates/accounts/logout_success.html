@@ -15,7 +15,15 @@
 {% block content %}
 <br>
 <p>You logged out</p>
-    
-
 
 {% endblock content %}
+
+{% block footer_javascript_page %}
+<script>
+    function redirect(){
+       window.location.href = "{% url 'core:event_index' %}";
+    }
+
+    setTimeout(redirect, 3000); //2000 is equivalent to 2 seconds
+</script>
+{% endblock footer_javascript_page %}
