@@ -41,6 +41,8 @@
 {% block footer_javascript_page %}
 <script>
     $("button[id|=button-accept-invite]").click(function (event){
+        $(this).prop('disabled', true).text('Invite Accepted')
+        
         $.get({
             url: "{% url 'core:ajax_accept_invite' %}",
             data: {event_id: $(this).attr("id").split('-')[3]},
