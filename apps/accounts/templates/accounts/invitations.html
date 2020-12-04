@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{# Load the tag library #}
+<!-- Load the tag library -->
 {% load bootstrap4 %}
 
 {# Load CSS and JavaScript #}
@@ -11,7 +11,10 @@
 {% bootstrap_messages %}
 {% block title %}User Details {% endblock title %}
 
+<!-- Load Statifc -->
+{% load static %}
 
+<!-- Block content  -->
 {% block content %}
 <br>
 <div>Invitations:</div>
@@ -40,16 +43,7 @@
 {% endblock content %}
 {% block footer_javascript_page %}
 <script>
-    $("button[id|=button-accept-invite]").click(function (event){
-        $(this).prop('disabled', true).text('Invite Accepted')
-        
-        $.get({
-            url: "{% url 'core:ajax_accept_invite' %}",
-            data: {event_id: $(this).attr("id").split('-')[3]},
-            success: function(resp) {
-                console.log('Invite Accepted');
-            }
-        });
-    });
+    var ajaxUrl = "{% url 'core:ajax_accept_invite' %}"
 </script>
+<script src="{% static 'core/js/invitations.js' %}"></script>
 {% endblock footer_javascript_page %}

@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from 
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.urls import reverse
@@ -8,7 +9,7 @@ from .utils import ModelFactory
 
 from bs4 import BeautifulSoup
 
-class EventTestCase(TestCase):
+class EventDetailsTestCase(TestCase):
     def setUp(self):
 
         self.mf = ModelFactory()
@@ -143,56 +144,25 @@ class CreateEventTestCase(TestCase):
         self.c.force_login(self.logged_in_user)
 
 
-    def test_submit_form(self):
+    def test_form(self):
         
         tomorrow = timezone.now() + timezone.timedelta(days=1)
         ctx = {
             'name': 'Test Event',
             'date': tomorrow, 
-            'time': tomorrow, 
             'location': 'a place', 
             'description': "It's gonna be so fun!",
         }
+        with self.subTest('The current user is not listed as an option for invitation'):
+            pass
+
+        with self.subTeset('All other uses are listed as options for invitations'):
+            pass
+        
+        
         response = self.c.post(reverse('core:create_event'), **ctx)
         new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
         
-        with self.subTest('A valid event submits to stage 2'):
-            self.assertNotEqual(new_event, None)
-            self.assertRedirects(response, reverse('core:event_stage_two', args=[new_event.id]))
-
-
-        response = self.c.get(reverse('core:event_stage_two', args=[new_event.id]))
-        
-        with self.subTest('Stage 2 page links to the event details'):
-            self.assertContains(response, reverse('core:event_details', args=[new_event.id]))
-
-        with self.subTest('Self is not listed as option for host or invited'):
-            invite_response = self.c.get(reverse('core:get_potential_invites'))
-            self.assertFalse(new_event.creator.username in invite_response['users_to_invite'])
-
-        # with self.subTest('A location thats not in the database'):
-        #     # Create the location
-        #     ctx['name'] = 'Not in Database'
-        #     ctx['location'] = '100 New Location Rd'
-        #     response = self.c.post(reverse('core:create_event'), **ctx)
-        #     new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
-        #     new_location = Location.objects.filter(address=ctx['location'])[0]
-        #     self.assertNotEqual(new_event, None)
-        #     self.assertNotEqual(new_location, None)
-        #     self.assertRedirects(response, reverse('core:event_stage_two', args=[new_event.id]))
-            
-            
-
-        # with self.subTest('A location thats in the database'):
-        #     # Don't make a duplicate
-        #     ctx['name'] = 'In Database'
-        #     ctx['location'] = '100 Existing Location Rd'
-        #     Location.objects.create(name='Existing Location', address='100 Existing Location Rd')
-        #     response = self.c.post(reverse('core:create_event'), **ctx)
-        #     new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
-        #     self.assertNotEqual(new_event, None)
-        #     self.assertEqual(len(Location.objects.filter(address=ctx['location'])), 1) #Don't create a second one
-        #     self.assertRedirects(response, reverse('core:event_stage_two', args=[new_event.id]))
             
             
 

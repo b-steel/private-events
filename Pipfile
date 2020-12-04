@@ -9,6 +9,7 @@ django-bootstrap4 = "*"
 essential-generators = "*"
 django-bootstrap-modal-forms = "*"
 markdown = "*"
+selenium = "*"
 
 [dev-packages]
 bpython = "*"
