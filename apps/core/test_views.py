@@ -1,10 +1,15 @@
 from django.test import TestCase, Client
-from 
+
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.common.by import By
+
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.urls import reverse
+from django.core.cache import cache
 
-from .models import Location, Event, User
+from .models import Event, User
 from .utils import ModelFactory
 
 from bs4 import BeautifulSoup
@@ -29,58 +34,14 @@ class EventDetailsTestCase(TestCase):
 
         self.single_event = self.mf.events.new(attending=self.attending_user, invited=self.invited_user, host=self.host_user)
         
-        response = self.c.get(f'/event/{self.single_event.id}/')
+        response = self.c.get(reverse('core:event_details', kwargs={'event_id': self.single_event.pk}))
 
-        # TESTS FOR LOGGED IN USERS
         with self.subTest('The correct details are displayed'):
             self.assertContains(response, f'{self.single_event.name}')
             self.assertContains(response, f'{self.single_event.location}')
             self.assertContains(response, f'{self.single_event.creator.first_name}')
-            # self.assertContains(response, f'{self.single_event.date.FORMAT}')  Need to format
-
-        with self.subTest('An event lists those attending, but not those invited'):
-            self.assertNotContains(response, f'{self.invited_user.username}') # invited, not attending
-            self.assertContains(response, f'{self.attending_user.username}') # attending
-        
-        
-        # TESTS FOR INVITED USERS
-        with self.subTest('An invited user has an "Attend" option'):
-            self.c.logout()
-            self.c.force_login(self.invited_user)
-            response = self.c.get(f'/event/{self.single_event.id}/')
-            self.assertContains(response, 'Attend')
-
-        # TESTS FOR NON-INVITED USERS
-        with self.subTest('A non-invited user does not have an option to attend'):
-            self.c.logout()
-            self.c.force_login(self.not_invited_user)
-            response = self.c.get(f'/event/{self.single_event.id}/')
-            self.assertNotContains(response, 'Attend')
-
-        # TESTS FOR ATTENDING USERS
-        with self.subTest('An attending user has the option of un-RSVPing'):
-            self.c.logout()
-            self.c.force_login(self.attending_user)
-            response = self.c.get(f'/event/{self.single_event.id}/')
-            self.assertContains(response, "Don't Attend")
-
-        # TESTS FOR THE HOST OF AN EVENT
-        with self.subTest('A host has the option of editing the event details'):
-            self.c.logout()
-            self.c.force_login(self.host_user)
-            response = self.c.get(f'/event/{self.single_event.id}/')
-            
-            self.assertContains(response, 'Edit Details')
-            edit_url = reverse("core:edit_event", args=[self.single_event.id])
-            self.assertContains(response, f'href="{edit_url}"')
 
 
-        # TESTS FOR LOGGED OUT USERS
-        with self.subTest('A logged out user cannot see details'):
-            self.c.logout()
-            response = self.c.get(f'/event/{self.single_event.id}/')
-            #should redirect to login
-            self.assertRedirects(response, f"{reverse('accounts:login')}?next={reverse('core:event_details', kwargs={'event': self.single_event.pk})}")
 
 class EventIndexTestCase(TestCase):
     def setUp(self):
@@ -91,7 +52,7 @@ class EventIndexTestCase(TestCase):
         self.logged_in_user = self.mf.users.new()
         self.c.force_login(self.logged_in_user)
 
-    def test_event_index_view(self):
+    def test_index_view(self):
         ''' Test for index view of all events'''
 
         with self.subTest('Events are correctly listed in order, but with upcoming events before past events'):
@@ -115,7 +76,7 @@ class EventIndexTestCase(TestCase):
             self.past_event3 = self.mf.events.new(date=past3)
             self.past_event4 = self.mf.events.new(date=past4)
 
-            response = self.c.get(reverse('core:event_index'))
+            response = self.c.get(reverse('core:index'))
 
             page = response.content
             self.assertGreater(page.find(self.event2.name.encode('utf-8')),page.find(self.event1.name.encode('utf-8'))) #Event 2 should come after event 1
@@ -125,13 +86,6 @@ class EventIndexTestCase(TestCase):
             self.assertGreater(page.find(self.past_event2.name.encode('utf-8')),page.find(self.past_event1.name.encode('utf-8')))
             self.assertGreater(page.find(self.past_event3.name.encode('utf-8')),page.find(self.past_event2.name.encode('utf-8')))
             self.assertGreater(page.find(self.past_event4.name.encode('utf-8')),page.find(self.past_event3.name.encode('utf-8')))
-
-        # with self.subTest('All events have a link to their own detail page'):
-        #     events = [
-        #         self.event1, self.event2, self.event3, self.event4, self.past_event1, self.past_event2, self.past_event3, self.past_event4, 
-        #     ]
-        #     soup = BeautifulSoup(response.content, 'html.parser')
-            # Need to implement once we know what the html will look like
 
 
 class CreateEventTestCase(TestCase):
@@ -144,26 +98,70 @@ class CreateEventTestCase(TestCase):
         self.c.force_login(self.logged_in_user)
 
 
-    def test_form(self):
+    def test_new_event(self):
         
+        # Create some users to be listed as possible invitations
+        other_users = []
+        for i in range(4):
+            other_users.append(self.mf.users.new(username=f'test_user-{i}'))
+        
+        response = self.c.get(reverse('core:create_event'))
+        with self.subTest('The current user is not listed as an option for invitation'):
+            self.assertNotContains(response, self.logged_in_user.full_name)
+
+        with self.subTest('All other uses are listed as options for invitations'):
+            for user in other_users:
+                self.assertContains(response, user.full_name)
+        
+        # Details for an event to be created
         tomorrow = timezone.now() + timezone.timedelta(days=1)
         ctx = {
             'name': 'Test Event',
-            'date': tomorrow, 
+            'date': tomorrow.strftime('%m/%d/%Y'),
             'location': 'a place', 
             'description': "It's gonna be so fun!",
         }
-        with self.subTest('The current user is not listed as an option for invitation'):
-            pass
+        # Make sure we populate the cache with some info on who's invited
+        invite_data = {
+            'invited': {
+                other_users[1].pk: True, 
+                other_users[0].pk: True, 
+                other_users[2].pk: False,
+            },
+            'hosts': {
+                other_users[3].pk: True
+            }
+        }
+        cache.set('create_event', invite_data, 600)
 
-        with self.subTeset('All other uses are listed as options for invitations'):
-            pass
+        # Post the event data and get a response
+        response = self.c.post(reverse('core:create_event'), ctx)
         
+        event = Event.objects.last()
+
+        with self.subTest('We get a redirect to the event page'):
+            self.assertRedirects(response, reverse('core:event_details', args=[event.pk]))
         
-        response = self.c.post(reverse('core:create_event'), **ctx)
-        new_event = Event.objects.filter(name=ctx['name']).filter(date=tomorrow)[0]
+        with self.subTest('The event has the correct details'):
+            self.assertIn(other_users[0], event.invited.all())
+            self.assertIn(other_users[1], event.invited.all())
+            self.assertNotIn(other_users[2], event.invited.all())
+            self.assertIn(other_users[3], event.hosts.all())
+            self.assertEqual(self.logged_in_user, event.creator)
+
+        with self.subTest('The cache has been cleared'):
+            c = cache.get('create_event', 'no result')
+            self.assertEqual(c, 'no result')
         
-            
-            
+
+        resp = self.c.get(reverse('core:index'))
+        with self.subTest('The event has been added to the index'):
+            self.assertContains(resp, event.name)
 
 
+
+        self.c.logout()
+        self.c.force_login(other_users[0])
+        resp = self.c.get(reverse('core:index'))
+        with self.subTest('The invited users have an invitation notification'):
+            self.assertContains(resp, 'You have 1 invite')

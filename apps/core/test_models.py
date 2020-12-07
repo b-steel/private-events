@@ -2,23 +2,12 @@ from django.test import TestCase, Client
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from .models import Location, Event, User
+from .models import Event, User
 from .utils import ModelFactory
 
 
 
-class LocationTestCase(TestCase):
 
-    def test_attributes(self):
-        '''A location must have a name and an address'''
-        no_addy = Location.objects.create(name='no address')
-        no_name = Location.objects.create(address='no name')
-        good_location = Location.objects.create(name='good', address='here')
-
-        self.assertRaises(ValidationError, no_addy.full_clean)
-        self.assertRaises(ValidationError, no_name.full_clean)
-
-        
 
 class EventTestCase(TestCase):
     def setUp(self):
@@ -39,10 +28,6 @@ class EventTestCase(TestCase):
         self.assertIn(self.event_with_logged_in_creator, self.logged_in_user.events_created.all())
 
     
-    def test_location_related_name(self):
-        self.assertIn(self.event_at_test_location, self.test_location.events.all())
-        self.assertNotIn(self.event_with_logged_in_creator, self.test_location.events.all())
-
     def test_invited(self):
         self.invited_user = self.mf.users.new()
         self.event_with_invited_users = self.mf.events.new(invited=self.invited_user)

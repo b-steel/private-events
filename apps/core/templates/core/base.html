@@ -35,8 +35,8 @@
     {% block head_css_page %}{% endblock head_css_page %}
     {% endblock head_css %}
     {% block head_scripts %}
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
     <script src="{% static 'core/js/jquery-3.5.1.js' %}"></script>
+    <script src="https://kit.fontawesome.com/044da3f768.js" crossorigin="anonymous"></script>
     {% endblock head_scripts %}
 </head>
 
@@ -105,12 +105,13 @@
         {% endblock content %}
 
     </main>
-
+    
     <!-- FOOTER  -->
-    <footer class="footer mt-auto py-3 fixed-bottom">
-        <div class="container text-center">
-            <small class="text-muted">Copyright &copy; Your Website</small>
-        </div>
+    <footer class="footer">
+        <a href="https://github.com/b-steel">
+            <small class="text-muted">Built by B-Steel</small>
+            <i class="fab fa-github"></i>
+        </a>
     </footer>
 </body>
 
