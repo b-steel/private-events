@@ -63,11 +63,11 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:event_index' %}">Index</a>
+                        <a class="nav-link" href="{% url 'core:index' %}">Index</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:create_event' %}">New Event</a>
+                        <a id="link-new-event" class="nav-link" href="{% url 'core:create_event' %}">New Event</a>
                     </li>
                     {% else %}
                     {% endif %}
@@ -76,17 +76,17 @@
                     <ul class="navbar-nav mr-auto">
                         {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+                            <a id="link-logout" class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
                         </li>
                         {% if invites %}
                         <li class="nav-item">
-                            <a class="nav-link text-primary" href="{% url 'accounts:invitations'  %}">You have {{ invites.count }} invite{{invites.count | pluralize}}</a>
+                            <a id="link-invites" class="nav-link text-primary" href="{% url 'accounts:invitations'  %}">You have {{ invites.count }} invite{{invites.count | pluralize}}</a>
                         </li>
                         {% else %}
                         {% endif %}
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                            <a id="link-login" class="nav-link" href="{% url 'accounts:login' %}">Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>

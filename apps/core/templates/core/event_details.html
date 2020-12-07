@@ -23,11 +23,11 @@
 <div class="row">
     <div class="col">
 
-        <p>Created by:
+        <p id="event-creator">Created by:
             <a href="{% url 'accounts:user_details' event.creator.username %}">{{event.creator.full_name }}</a>
         </p>
         {% if event.hosts.all %}
-        <p>Additional Hosts:
+        <p id="additional-hosts">Additional Hosts:
             {% for host in event.hosts.all %}
             {% include 'core/comma.html' %}
             <a href="{% url 'accounts:user_details' host.username %}">{{ host.full_name }}</a>
@@ -37,8 +37,8 @@
         {% else %}
         {% endif %}
         <hr>
-        <p>When: {{event.date | date:"l, M jS, Y" }}</p>
-        <p>Where: {{ event.location |default:"No Location - please contact the host for more info"}}</p>
+        <p id="event-date">When: {{event.date | date:"l, M jS, Y" }}</p>
+        <p id="event-location">Where: {{ event.location |default:"No Location - please contact the host for more info"}}</p>
         <hr>
         <p id="event-description">{{ event.description }}</p>
     </div>

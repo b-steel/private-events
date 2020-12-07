@@ -22,6 +22,7 @@ class NewUser(views.View):
         form = UserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            login(request, user)
             return redirect(reverse('accounts:user_details', kwargs={'username':user.username}))
 
 

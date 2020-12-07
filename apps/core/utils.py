@@ -1,4 +1,4 @@
-from .models import Event, Location, User
+from .models import Event, User
 import random
 from django.utils import timezone
 from essential_generators import DocumentGenerator
@@ -37,31 +37,6 @@ class UserFactory():
         else: 
             return self.new()
 
-
-class LocationFactory():
-    def __init__(self):
-        self.last = None
-        
-    def new(self, name=NOTHING, address=NOTHING):
-        if name is NOTHING:
-            name = gen.name()
-        if address is NOTHING:
-            address = f"{random.randrange(1000, 10000)} {gen.name().split(' ')[1]} {random.choice(['St', 'Rd', 'Ln', 'Ave'])}"
-
-        loc = Location.objects.create(name=name, address=address)
-        self.last = loc
-        self.__setattr__(loc.name, loc)
-        return loc
-
-    @property
-    def all(self):
-        return list(Location.objects.all())
-
-    def random(self):
-        if self.all:
-            return random.choice(self.all) 
-        else: 
-            return self.new()
 
 class StringLocationFactory():
     def new(self):

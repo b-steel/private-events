@@ -3,7 +3,7 @@ from . import views
 
 app_name ='core'
 urlpatterns = [
-    path('index/', views.EventIndexView.as_view(), name='event_index'),
+    path('index/', views.EventIndexView.as_view(), name='index'),
     path('event/new/', views.CreateEventView.as_view(), name='create_event'),
     path('event/<slug:event_id>/show/', views.EventDetailView.as_view(), name='event_details'),
     # path('event/<slug:event_id>/edit/', PLACEHOLDER, name='edit_event'),

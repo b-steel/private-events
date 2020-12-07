@@ -5,7 +5,7 @@ from django.contrib.auth.models import User as auth_user
 from django.core.cache import cache
 
 class User(auth_user):
-
+    @property
     def full_name(self):
         return self.first_name.capitalize() + ' ' + self.last_name.capitalize()
 
