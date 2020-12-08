@@ -57,3 +57,8 @@ Up to this point I'd just been making things as I went, but for experience I dec
 While writing tests for the 'Create Event' page I started to run into some trouble tring to devise how I wanted the page to work.  The question was how to allow you to invite (or set as a host) existing users - and a similar problem for the location of the event. The prompt for the assignment didn't have any info about this (plus the prompt is for Ruby / Rails), and I wanted the interface to be relatively intuitive.  I settled on having a list of all users with buttons for inviting / making them hosts.  After the user chose who to invite, an AJAX request is sent to the server to cache that information.  I chose to cache the info since the actual event hasn't been created yet, so there's no event to associate the invites with in the database.  I could have created a dummy event to attach the associations to and then update the event later, but this seemed simpler.  
 
 
+## TODO
+
+Tests for cannot make an event in the past
+
+footer at bottom with short content

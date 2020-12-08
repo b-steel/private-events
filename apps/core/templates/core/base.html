@@ -43,76 +43,84 @@
 <!-- HTML BODY -->
 
 <body>
+    <div id="page-container">
+        <div id="content-wrap">
 
-    <!-- HEADER -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light {% block nav-style %}{% endblock %}">
-            <span class="navbar-brand">EventLite</span>
+            <!-- HEADER -->
+            <header>
+                <nav class="navbar navbar-expand-lg navbar-light bg-light {% block nav-style %}{% endblock %}">
+                    <span class="navbar-brand">EventLite</span>
 
-            {% if user.is_authenticated %}
-            <div class="navbar-text">
-                <a class="nav-link" href="{% url 'accounts:user_details' user.username %}"><span>Welcome
-                        {{ user.first_name | capfirst }}</span></a>
-            </div>
-            {% endif %}
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:index' %}">Index</a>
-                    </li>
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a id="link-new-event" class="nav-link" href="{% url 'core:create_event' %}">New Event</a>
-                    </li>
-                    {% else %}
+                    <div class="navbar-text">
+                        <a class="nav-link" href="{% url 'accounts:user_details' user.username %}"><span>Welcome
+                                {{ user.first_name | capfirst }}</span></a>
+                    </div>
                     {% endif %}
-                </ul>
-                <div>
-                    <ul class="navbar-nav mr-auto">
-                        {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a id="link-logout" class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
-                        </li>
-                        {% if invites %}
-                        <li class="nav-item">
-                            <a id="link-invites" class="nav-link text-primary" href="{% url 'accounts:invitations'  %}">You have {{ invites.count }} invite{{invites.count | pluralize}}</a>
-                        </li>
-                        {% else %}
-                        {% endif %}
-                        {% else %}
-                        <li class="nav-item">
-                            <a id="link-login" class="nav-link" href="{% url 'accounts:login' %}">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-    <!-- DOCUMENT BODY  -->
-    <main class="container" role="main">
-        {% block content %}
-        if you see this, something is wrong!
-        {% endblock content %}
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'core:index' %}">Index</a>
+                            </li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a id="link-new-event" class="nav-link" href="{% url 'core:create_event' %}">New
+                                    Event</a>
+                            </li>
+                            {% else %}
+                            {% endif %}
+                        </ul>
+                        <div>
+                            <ul class="navbar-nav mr-auto">
+                                {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a id="link-logout" class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+                                </li>
+                                {% if invites %}
+                                <li class="nav-item">
+                                    <a id="link-invites" class="nav-link text-primary"
+                                        href="{% url 'accounts:invitations'  %}">You have {{ invites.count }}
+                                        invite{{invites.count | pluralize}}</a>
+                                </li>
+                                {% else %}
+                                {% endif %}
+                                {% else %}
+                                <li class="nav-item">
+                                    <a id="link-login" class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
 
-    </main>
-    
-    <!-- FOOTER  -->
-    <footer class="footer">
-        <a href="https://github.com/b-steel">
-            <small class="text-muted">Built by B-Steel</small>
-            <i class="fab fa-github"></i>
-        </a>
-    </footer>
+            <!-- DOCUMENT BODY  -->
+            <main class="container" role="main">
+                {% block content %}
+                if you see this, something is wrong!
+                {% endblock content %}
+
+            </main>
+
+        </div>
+        <!-- FOOTER  -->
+        <footer id="footer">
+            <a href="https://github.com/b-steel">
+                <small class="text-muted">Built by B-Steel</small>
+                <i class="fab fa-github"></i>
+            </a>
+        </footer>
+    </div>
 </body>
 
 <!-- Set of blocks that can be used to display JavaScript files -->
