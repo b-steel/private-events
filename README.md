@@ -45,28 +45,28 @@ I wanted an intuitive method for inviting people, without having to put a lot of
 It's quite verbose and I'm sure can be improved, but with my current js knowledge it gets the job done:
 
 '''
-$("#modal-invite-submit").click(function (event) {
-    var data = {
-        invited: {},
-        hosts: {}
-    };
-    $(".invitation-list-item").each(function(index) {
-        let inviteButton = $(this).children("button[id|=button-invite-user]");
-        let hostButton = $(this).children("button[id|=button-host-user]");
-        let user_id = inviteButton.attr("id").split('-')[3];
-        user_id = parseInt(user_id);
-        let inviteStatus = statusDictionary[inviteButton.text().trim()];
-        let hostStatus = statusDictionary[hostButton.text().trim()];
+    $("#modal-invite-submit").click(function (event) {
+        var data = {
+            invited: {},
+            hosts: {}
+        };
+        $(".invitation-list-item").each(function(index) {
+            let inviteButton = $(this).children("button[id|=button-invite-user]");
+            let hostButton = $(this).children("button[id|=button-host-user]");
+            let user_id = inviteButton.attr("id").split('-')[3];
+            user_id = parseInt(user_id);
+            let inviteStatus = statusDictionary[inviteButton.text().trim()];
+            let hostStatus = statusDictionary[hostButton.text().trim()];
 
-        data.invited[user_id] = inviteStatus;
-        data.hosts[user_id] = hostStatus;
+            data.invited[user_id] = inviteStatus;
+            data.hosts[user_id] = hostStatus;
 
+        });
+
+        $.get({
+            url: ajaxUrl,
+            data: {data: JSON.stringify(data)},
+            dataType:'json',
+        });
     });
-
-    $.get({
-        url: ajaxUrl,
-        data: {data: JSON.stringify(data)},
-        dataType:'json',
-    });
-});
 '''
