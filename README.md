@@ -42,7 +42,7 @@ With Django, the way you add relations between models is via a related manager, 
 
 I wanted an intuitive method for inviting people, without having to put a lot of work into it (this was after all a feature not even in the assignment). After some experimentation (and a bit of learning some jQuery) I settled on a small script that collected all the info from the invitation buttons and then sent that info via an AJAX request to the server to be cached. Then when the event itself is created, that info is pulled from the server, and incorporated into the event.  
 
-It's quite verbose and I'm sure can be improved, but with my current js knowledge it gets the job done
+It's quite verbose and I'm sure can be improved, but with my current js knowledge it gets the job done:
 
 '''
 $("#modal-invite-submit").click(function (event) {
