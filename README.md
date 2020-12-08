@@ -60,5 +60,3 @@ While writing tests for the 'Create Event' page I started to run into some troub
 ## TODO
 
 Tests for cannot make an event in the past
-
-footer at bottom with short content

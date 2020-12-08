@@ -12,6 +12,7 @@ class EventForm(forms.ModelForm):
                 'placeholder': 'MM/DD/YYYY'
             }), 
         }
-        help_texts = {
-            'date': 'Format: MM/DD/YYYY'
-        }
+        
+        # help_texts = {
+        #     'date': 'Format: MM/DD/YYYY'
+        # }
