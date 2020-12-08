@@ -44,7 +44,7 @@ I wanted an intuitive method for inviting people, without having to put a lot of
 
 It's quite verbose and I'm sure can be improved, but with my current js knowledge it gets the job done:
 
-'''
+```javascript
     $("#modal-invite-submit").click(function (event) {
         var data = {
             invited: {},
@@ -69,4 +69,4 @@ It's quite verbose and I'm sure can be improved, but with my current js knowledg
             dataType:'json',
         });
     });
-'''
+```
