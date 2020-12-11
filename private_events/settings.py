@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from .settings_local import set_env
+set_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,10 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-DEBUG = False # overridden in settings_local.py
+#SURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = int(os.environ.get('DJANGO_DEBUG', 0))
 
 
-ALLOWED_HOSTS = ['testserver', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(' ')
 
 # Application definition
 
@@ -135,9 +142,3 @@ CACHES = {
 
 # Authentication
 LOGIN_URL = 'accounts:login'
-
-# Local Settings
-try: 
-    from .settings_local import *
-except ImportError:
-    pass
