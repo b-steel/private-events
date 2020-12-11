@@ -83,8 +83,7 @@
                                 {% if invites %}
                                 <li class="nav-item">
                                     <a id="link-invites" class="nav-link text-primary"
-                                        href="{% url 'accounts:invitations'  %}">You have {{ invites.count }}
-                                        invite{{invites.count | pluralize}}</a>
+                                        href="{% url 'accounts:invitations'  %}">You have {{ invites.count }} invite{{invites.count | pluralize}}</a>
                                 </li>
                                 {% else %}
                                 {% endif %}

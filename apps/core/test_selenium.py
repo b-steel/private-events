@@ -15,7 +15,6 @@ class SeleniumTests(SeleniumTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.wd = WebDriver()
-        cls.wd.implicitly_wait(10)
         cls.mf = ModelFactory()
         cls.su = cls.mf.users.new(username='super_user')
 
@@ -24,8 +23,37 @@ class SeleniumTests(SeleniumTestCase):
         cls.wd.quit()
         super().tearDownClass()
 
-    def test_new_user(self):
-        # use the .open custom method from the SeleniumTestCase.  Takes a relative URL and appends it to the live_server_url
+    def setUp(self):
+        self.login()
+        
+    def test(self):
+        with self.subTest('Create a new event'):
+            self.open(reverse('core:create_event'))
+            WebDriverWait(self.wd, timeout=3).until(lambda d: d.find_element(By.XPATH, "//button[@type='submit']"))
+            form = self.wd.find_element(By.TAG_NAME, 'form')
+            name = form.find_element(By.ID, 'id_name').send_keys('Selenium Test Event')
+            description = self.wd.find_element(By.ID, 'id_description').send_keys('This event created by Selenium')
+            date = self.wd.find_element(By.ID, 'id_date').send_keys((timezone.now()+timezone.timedelta(days=1)).strftime('%m/%d/%Y'))
+            location = self.wd.find_element(By.ID, 'id_location').send_keys('Here or There')
+
+            button = form.find_element(By.XPATH, "//button[@type='submit']").click()
+            # modal = self.wd.find_element(By.ID, 'button-open-modal').click()
+            
+            # Should redirect to the event
+            self.assertIn('Event Details', self.wd.title)
+
+
+        with self.subTest('Look at an events details'):
+            event = self.mf.events.new(name='First Event', date='future')
+            
+            self.open(reverse("core:index"))
+            href = reverse('core:event_details', kwargs={'event_id':event.pk})
+            self.wd.find_element(By.XPATH, f"//a[@href='{href}']").click()
+            #should got to the details for the new event
+            self.assertIn(event.location, self.wd.find_element(By.ID, 'event-location').text)
+
+    def test_c_new_user(self):
+        self.logout() # make sure we're logged out
         self.open(reverse("accounts:signup"))
         form = self.wd.find_element(By.TAG_NAME, 'form')
         username = form.find_element(By.ID, 'id_username').send_keys('new_user')
@@ -52,36 +80,6 @@ class SeleniumTests(SeleniumTestCase):
             
             # Wait for the redirect
             WebDriverWait(self.wd, timeout=3).until(lambda d: 'Index' in d.title)
-
-
-    def test_event(self):
-        event = self.mf.events.new(name='First Event', date='future')
-        self.login()
-        self.open(reverse("core:index"))
-        href = reverse('core:event_details', kwargs={'event_id':event.pk})
-        self.wd.find_element(By.XPATH, f"//a[@href='{href}']").click()
-        #should got to the details for the new event
-        self.assertIn(event.location, self.wd.find_element(By.ID, 'event-location').text)
-        
-    def test_new_event(self):
-        self.login()
-
-        self.open(reverse('core:create_event'))
-        WebDriverWait(self.wd, timeout=3).until(lambda d: d.find_element(By.XPATH, "//button[@type='submit']"))
-        form = self.wd.find_element(By.TAG_NAME, 'form')
-        name = self.wd.find_element(By.ID, 'id_name').send_keys('Selenium Test Event')
-        description = self.wd.find_element(By.ID, 'id_description').send_keys('This event created by Selenium')
-        date = self.wd.find_element(By.ID, 'id_date').send_keys((timezone.now()+timezone.timedelta(days=1)).strftime('%m/%d/%Y'))
-        location = self.wd.find_element(By.ID, 'id_location').send_keys('Here or There')
-
-        button = form.find_element(By.XPATH, "//button[@type='submit']").click()
-        # modal = self.wd.find_element(By.ID, 'button-open-modal').click()
-        
-        # Should redirect to the event
-        self.assertIn('Event Details', self.wd.title)
-
-
-
 
 
             
