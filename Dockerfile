@@ -11,6 +11,8 @@ RUN pip install --upgrade pip \
 # Copy project 
 COPY . .
 
+# flush database
+RUN python manage.py flush --noinput
 # migrate
 RUN python manage.py migrate
 #generate events
