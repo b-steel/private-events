@@ -17,8 +17,6 @@ class User(auth_user):
             return True
         return False
     
-    
-
 
 class EventManager(models.Manager):
     def get_future_events(self, when=timezone.now()):
