@@ -8,4 +8,6 @@ db.sqlite3-journal
 # Docker
 .dockerignore
 
+# heroku
+heroku.fish
 
