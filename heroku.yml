@@ -1,8 +1,3 @@
-setup:
-  config:
-    DJANGO_DEBUG: True
-    DJANGO_SECRET_KEY: '#%q_otw07!kt344_=^m)rpi%1wl#x38c^ah9ksds7-vz^_l-*='
-    DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 .herokuapp.com
 build:
   docker:
     web: Dockerfile.prod
