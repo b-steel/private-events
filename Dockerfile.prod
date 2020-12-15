@@ -11,4 +11,4 @@ RUN pip install --upgrade pip \
 # Copy project 
 COPY . .
 
-ENTRYPOINT [ "entrypoint.sh" ]
+ENTRYPOINT [ "/usr/src/app/entrypoint.sh" ]
