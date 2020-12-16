@@ -9,7 +9,9 @@ from . import models, forms
 from .models import User
 
 import json
-
+class AboutView(View):
+    def get(self, request):
+        return render(request, 'core/about.html', {})
 
 class EventDetailView(LoginRequiredMixin, View):
 

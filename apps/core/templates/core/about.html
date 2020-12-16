@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+{% block title %}Home {% endblock title %}
+
+
+{% block content %}
+<br>
+<div class="row">
+    <div class="col">
+        <p>Welcome to <em>Private Events</em>, an events manager page where you can create events and invite friends.
+        </p>
+        <p>This project was created with Django, Jquery, and Bootstrap.  You can take a look at the <a href="https://github.com/b-steel/private-events/blob/master/README.md">README</a> if you'd like a more in depth discussion of the steps I took to create the page.
+        </p>
+        <hr>
+        <p>Feel free to look around: you can create your own account, or if you'd just like to explore some
+            functionality you can log in with the username <strong>test_user</strong>
+        </p>
+
+    </div>
+</div>
+
+
+
+{% endblock content %}
