@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Flush db
+python manage.py flush --noinput
 # migrate
 python manage.py migrate
 #generate events
@@ -9,3 +11,5 @@ python -c "import os; \
     application = get_wsgi_application(); \
     from apps.core.utils import lorem_ipsum; \
     lorem_ipsum(25)"
+
+exec "$@"
