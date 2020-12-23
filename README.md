@@ -1,5 +1,7 @@
 # private-events
 
+[Live Preview](https://top-pe.herokuapp.com/) (it's Heroku, so it may take up to 30 sec for the page to "wake up" since they sleep all their dynos that aren't in use)
+
 This project is from *The Odin Project's* Ruby on Rails course, which I've been completing in Python/ Django.
 
 [Link](https://www.theodinproject.com/courses/ruby-on-rails/lessons/associations) the the assignment page and description. 
